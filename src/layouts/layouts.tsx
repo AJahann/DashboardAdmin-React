@@ -1,3 +1,6 @@
+import LeftSideBar from "../components/LeftSideBar";
+import PageContent from "../components/PageContent";
+
 const layouts = () => {
   return (
     <>
@@ -8,8 +11,8 @@ const layouts = () => {
           type="checkbox"
           className="drawer-toggle"
         />
-        {/* <PageContent /> */}
-        {/* <LeftSidebar /> */}
+        <PageContent />
+        <LeftSideBar />
       </div>
 
       {/* Right drawer - containing secondary content like notifications list etc.. */}
