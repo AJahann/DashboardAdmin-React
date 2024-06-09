@@ -1,3 +1,6 @@
+import Dashboard from "../pages/Home/Dashboard";
+import Leads from "../pages/Home/Leads";
+import Transactions from "../pages/Home/Transactions";
 import Header from "./Header";
 
 const routes = [
@@ -68,8 +71,11 @@ const PageContent = () => {
     <div className="drawer-content flex flex-col ">
       <Header />
       <main className="flex-1 overflow-y-auto md:pt-4 pt-4 px-6  bg-base-200">
+        {/* <Dashboard /> */}
+        {/* <Leads /> */}
+        <Transactions />
         {/* <Routes> */}
-        {routes.map((route) => {
+        {/* {routes.map((route) => {
           //   return (
           //     <Route
           //       key={route.name}
@@ -78,8 +84,8 @@ const PageContent = () => {
           //       element={<route.component />}
           //     />
           //   );
-          return <p key={route.path}>route.path</p>;
-        })}
+          return <p key={route.path}>{route.path}</p>;
+        })} */}
 
         {/* Redirecting unknown url to 404 page */}
         {/* <Route path="*" element={<Page404 />} /> */}
