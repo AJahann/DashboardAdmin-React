@@ -1,7 +1,9 @@
 import Dashboard from "../pages/Home/Dashboard";
 import Leads from "../pages/Home/Leads";
 import Transactions from "../pages/Home/Transactions";
+import Analytics from "../pages/Home/Analytics";
 import Header from "./Header";
+import Calendar from "../pages/Home/Calendar";
 
 const routes = [
   {
@@ -73,7 +75,9 @@ const PageContent = () => {
       <main className="flex-1 overflow-y-auto md:pt-4 pt-4 px-6  bg-base-200">
         {/* <Dashboard /> */}
         {/* <Leads /> */}
-        <Transactions />
+        {/* <Transactions /> */}
+        {/* <Analytics /> */}
+        <Calendar />
         {/* <Routes> */}
         {/* {routes.map((route) => {
           //   return (
