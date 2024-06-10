@@ -4,6 +4,11 @@ import Transactions from "../pages/Home/Transactions";
 import Analytics from "../pages/Home/Analytics";
 import Header from "./Header";
 import Calendar from "../pages/Home/Calendar";
+import Page404 from "../pages/Home/404";
+import Profile from "../pages/Home/Profile";
+import Team from "../pages/Home/Team";
+import Billing from "../pages/Home/Billing";
+import LandingIntro from "../pages/Auth/LoginIntro";
 
 const routes = [
   {
@@ -73,11 +78,16 @@ const PageContent = () => {
     <div className="drawer-content flex flex-col ">
       <Header />
       <main className="flex-1 overflow-y-auto md:pt-4 pt-4 px-6  bg-base-200">
-        {/* <Dashboard /> */}
+        {/* <LandingIntro /> */}
+        <Dashboard />
         {/* <Leads /> */}
         {/* <Transactions /> */}
         {/* <Analytics /> */}
-        <Calendar />
+        {/* <Calendar /> */}
+        {/* <Page404 /> */}
+        {/* <Profile /> */}
+        {/* <Team /> */}
+        {/* <Billing /> */}
         {/* <Routes> */}
         {/* {routes.map((route) => {
           //   return (
