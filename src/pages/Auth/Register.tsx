@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import InputText from "../../components/InputText";
 import LandingIntro from "./LoginIntro";
@@ -39,11 +40,11 @@ const Register = () => {
 
               <div className="text-center mt-4">
                 Already have an account?{" "}
-                <a href="/">
+                <Link to="/login">
                   <span className="  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
                     Login
                   </span>
-                </a>
+                </Link>
               </div>
             </form>
           </div>

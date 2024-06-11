@@ -1,17 +1,18 @@
 import ChevronDownIcon from "@heroicons/react/24/outline/ChevronDownIcon";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface SidebarSubmenuProps {
   name: string;
   icon: JSX.Element;
-  submenu: {
+  children: {
     path: string;
     icon: JSX.Element;
     name: string;
   }[];
 }
 
-const SidebarSubmenu = ({ submenu, name, icon }: SidebarSubmenuProps) => {
+const SidebarSubmenu = ({ children, name, icon }: SidebarSubmenuProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -29,10 +30,10 @@ const SidebarSubmenu = ({ submenu, name, icon }: SidebarSubmenuProps) => {
       {/** Submenu list */}
       <div className={` w-full ${isExpanded ? "" : "hidden"}`}>
         <ul className="menu menu-compact">
-          {submenu.map((m) => {
+          {children.map((m) => {
             return (
               <li key={m.name}>
-                <a href={m.path}>
+                <Link to={m.path}>
                   {m.icon} {m.name}
                   {location.pathname === m.path ? (
                     <span
@@ -40,7 +41,7 @@ const SidebarSubmenu = ({ submenu, name, icon }: SidebarSubmenuProps) => {
                       aria-hidden="true"
                     />
                   ) : null}
-                </a>
+                </Link>
               </li>
             );
           })}

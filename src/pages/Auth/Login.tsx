@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import InputText from "../../components/InputText";
 import LandingIntro from "./LoginIntro";
@@ -28,11 +29,11 @@ const Login = () => {
               </div>
 
               <div className="text-right text-primary">
-                <a href="/">
+                <Link to="/forget-password">
                   <span className="text-sm  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
                     Forgot Password?
                   </span>
-                </a>
+                </Link>
               </div>
 
               {/* <ErrorText styleClass="mt-8">{errorMessage}</ErrorText> */}
@@ -45,11 +46,11 @@ const Login = () => {
 
               <div className="text-center mt-4">
                 Don&apos;t have an account yet?{" "}
-                <a href="/">
+                <Link to="/register">
                   <span className="  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
                     Register
                   </span>
-                </a>
+                </Link>
               </div>
             </form>
           </div>

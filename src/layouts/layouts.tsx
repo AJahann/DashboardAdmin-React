@@ -1,7 +1,7 @@
 import LeftSideBar from "../components/LeftSideBar";
 import PageContent from "../components/PageContent";
 
-const layouts = () => {
+const Layouts = () => {
   return (
     <>
       {/* Left drawer - containing page content and side bar (always open) */}
@@ -27,4 +27,4 @@ const layouts = () => {
   );
 };
 
-export default layouts;
+export default Layouts;

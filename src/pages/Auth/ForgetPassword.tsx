@@ -1,5 +1,6 @@
-import CheckCircleIcon from "@heroicons/react/24/solid/CheckCircleIcon";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import InputText from "../../components/InputText";
 import LandingIntro from "./LoginIntro";
@@ -30,11 +31,11 @@ const ForgetPassword = () => {
                   Check your email to reset password
                 </p>
                 <div className="text-center mt-4">
-                  <a href="/">
+                  <Link to="/login">
                     <button className="btn btn-block btn-primary ">
                       Login
                     </button>
-                  </a>
+                  </Link>
                 </div>
               </>
             ) : null}
@@ -63,11 +64,11 @@ const ForgetPassword = () => {
 
                   <div className="text-center mt-4">
                     Don&apos;t have an account yet?{" "}
-                    <a href="/">
+                    <Link to="/register">
                       <button className="  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
                         Register
                       </button>
-                    </a>
+                    </Link>
                   </div>
                 </form>
               </>
