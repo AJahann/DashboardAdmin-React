@@ -6,6 +6,10 @@ import appRoutes from "./pages/Home/routes";
 
 const mainRoutes = [
   {
+    path: "/",
+    element: <Login />,
+  },
+  {
     path: "/login",
     element: <Login />,
   },

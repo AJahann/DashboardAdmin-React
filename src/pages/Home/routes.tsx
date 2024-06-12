@@ -77,19 +77,19 @@ const appRoutes = [
         path: "login",
         icon: <ArrowRightOnRectangleIcon className={submenuIconClasses} />,
         name: "Login",
-        element: <Navigate to="/login" />,
+        element: <Navigate replace to="/login" />,
       },
       {
         path: "register",
         icon: <UserIcon className={submenuIconClasses} />,
         name: "Register",
-        element: <Navigate to="/register" />,
+        element: <Navigate replace to="/register" />,
       },
       {
         path: "forget-password",
         icon: <KeyIcon className={submenuIconClasses} />,
         name: "Forgot Password",
-        element: <Navigate to="/forget-password" />,
+        element: <Navigate replace to="/forget-password" />,
       },
       {
         path: "404",
@@ -100,7 +100,7 @@ const appRoutes = [
     ],
   },
   {
-    path: "", // no url needed as this has submenu
+    path: "",
     icon: <Cog6ToothIcon className={`${iconClasses} inline`} />,
     name: "Settings",
     children: [
@@ -125,7 +125,7 @@ const appRoutes = [
     ],
   },
   {
-    path: "", // no url needed as this has submenu
+    path: "",
     icon: <DocumentTextIcon className={`${iconClasses} inline`} />,
     name: "Documentation",
     children: [

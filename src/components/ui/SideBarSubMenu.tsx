@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import ChevronDownIcon from "@heroicons/react/24/outline/ChevronDownIcon";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -26,7 +27,6 @@ const SidebarSubmenu = ({ children, name, icon }: SidebarSubmenuProps) => {
           }`}
         />
       </div>
-
       {/** Submenu list */}
       <div className={` w-full ${isExpanded ? "" : "hidden"}`}>
         <ul className="menu menu-compact">
