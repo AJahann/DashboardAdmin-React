@@ -1,5 +1,6 @@
 import LeftSideBar from "../components/LeftSideBar";
 import PageContent from "../components/PageContent";
+import RightSidebar from "../components/RightSideBar";
 
 const Layouts = () => {
   return (
@@ -15,11 +16,7 @@ const Layouts = () => {
         <LeftSideBar />
       </div>
 
-      {/* Right drawer - containing secondary content like notifications list etc.. */}
-      {/* <RightSidebar /> */}
-
-      {/** Notification layout container */}
-      {/* <NotificationContainer /> */}
+      <RightSidebar />
 
       {/* Modal layout container */}
       {/* <ModalLayout /> */}
