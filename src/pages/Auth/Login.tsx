@@ -1,10 +1,51 @@
+import { useFormik } from "formik";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import InputText from "../../components/InputText";
+import supabase from "../../utils/supapase";
 import LandingIntro from "./LoginIntro";
 
+const initialValues = {
+  email: "",
+  password: "",
+};
+
 const Login = () => {
+  const navigate = useNavigate();
+
+  const form = useFormik({
+    validate(values) {
+      const errors: { email?: string; password?: string } = {};
+
+      if (!values.email) {
+        errors.email = "Required";
+      } else if (
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+      ) {
+        errors.email = "Invalid email address";
+      }
+
+      if (!values.password) {
+        errors.password = "Required";
+      }
+
+      return errors;
+    },
+    initialValues,
+    onSubmit: async (values) => {
+      const req = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (req.error) {
+        console.log(req.error);
+      } else {
+        navigate("/app", { replace: true });
+      }
+    },
+  });
   const [loading] = useState(false);
   return (
     <div className="min-h-screen bg-base-200 flex items-center">
@@ -13,19 +54,31 @@ const Login = () => {
           <div className="">{<LandingIntro />}</div>
           <div className="py-24 px-10">
             <h2 className="text-2xl font-semibold mb-2 text-center">Login</h2>
-            <form>
+            <form onSubmit={form.handleSubmit}>
               <div className="mb-4">
                 <InputText
-                  type="emailId"
+                  name="email"
+                  value={form.values.email}
+                  changeHandle={form.handleChange}
+                  type="email"
                   containerStyle="mt-4"
                   labelTitle="Email Id"
                 />
+                <p className="mt-2 text-red-300 text-sm">
+                  {form.touched.email ? form.errors.email : null}
+                </p>
 
                 <InputText
+                  name="password"
+                  value={form.values.password}
+                  changeHandle={form.handleChange}
                   type="password"
                   containerStyle="mt-4"
                   labelTitle="Password"
                 />
+                <p className="mt-2 text-red-300 text-sm">
+                  {form.touched.password ? form.errors.password : null}
+                </p>
               </div>
 
               <div className="text-right text-primary">
@@ -36,12 +89,12 @@ const Login = () => {
                 </Link>
               </div>
 
-              {/* <ErrorText styleClass="mt-8">{errorMessage}</ErrorText> */}
               <button
+                disabled={form.isSubmitting}
                 type="submit"
                 className={`btn mt-2 w-full btn-primary ${loading ? " loading" : ""}`}
               >
-                Login
+                {form.isSubmitting ? "Loading..." : "Login"}
               </button>
 
               <div className="text-center mt-4">
