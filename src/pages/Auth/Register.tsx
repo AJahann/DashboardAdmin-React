@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 import InputText from "../../components/InputText";
@@ -13,6 +13,8 @@ const initialValues = {
 };
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const validationSchema = Yup.object({
     name: Yup.string().required("This field is required"),
     email: Yup.string()
@@ -27,7 +29,7 @@ const Register = () => {
     validationSchema,
     initialValues,
     onSubmit: async (values) => {
-      await supabase.auth.signUp({
+      const req = await supabase.auth.signUp({
         options: {
           data: {
             name: values.name,
@@ -36,6 +38,12 @@ const Register = () => {
         email: values.email,
         password: values.password,
       });
+
+      if (req.error) {
+        console.log(req.error);
+      } else {
+        navigate("/app", { replace: true });
+      }
 
       setTimeout(() => {
         form.setSubmitting(false);
