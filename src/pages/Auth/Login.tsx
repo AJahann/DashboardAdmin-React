@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 
 import InputText from "../../components/InputText";
@@ -7,12 +7,35 @@ import supabase from "../../utils/supapase";
 import LandingIntro from "./LoginIntro";
 
 const initialValues = {
-  email: "",
-  password: "",
+  email: "ashkanja.x86@gmail.com",
+  password: "mmmmmm",
+};
+
+const loginUser = async (values: { email: string; password: string }) => {
+  const { email, password } = values;
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
 };
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const mutation = useMutation(loginUser, {
+    onSuccess: () => {
+      navigate("/app", { replace: true });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
 
   const form = useFormik({
     validate(values) {
@@ -33,25 +56,20 @@ const Login = () => {
       return errors;
     },
     initialValues,
-    onSubmit: async (values) => {
-      const req = await supabase.auth.signInWithPassword({
-        email: values.email,
-        password: values.password,
-      });
+    onSubmit: (values) => {
+      console.log(values);
 
-      if (req.error) {
-        console.log(req.error);
-      } else {
-        navigate("/app", { replace: true });
-      }
+      mutation.mutate(values);
     },
   });
-  const [loading] = useState(false);
+
   return (
     <div className="min-h-screen bg-base-200 flex items-center">
-      <div className="card mx-auto w-full max-w-5xl  shadow-xl">
-        <div className="grid  md:grid-cols-2 grid-cols-1  bg-base-100 rounded-xl">
-          <div className="">{<LandingIntro />}</div>
+      <div className="card mx-auto w-full max-w-5xl shadow-xl">
+        <div className="grid md:grid-cols-2 grid-cols-1 bg-base-100 rounded-xl">
+          <div className="">
+            <LandingIntro />
+          </div>
           <div className="py-24 px-10">
             <h2 className="text-2xl font-semibold mb-2 text-center">Login</h2>
             <form onSubmit={form.handleSubmit}>
@@ -83,24 +101,24 @@ const Login = () => {
 
               <div className="text-right text-primary">
                 <Link to="/forget-password">
-                  <span className="text-sm  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
+                  <span className="text-sm inline-block hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
                     Forgot Password?
                   </span>
                 </Link>
               </div>
 
               <button
-                disabled={form.isSubmitting}
+                disabled={mutation.isLoading}
                 type="submit"
-                className={`btn mt-2 w-full btn-primary ${loading ? " loading" : ""}`}
+                className="btn mt-2 w-full btn-primary"
               >
-                {form.isSubmitting ? "Loading..." : "Login"}
+                {mutation.isLoading ? "Loading..." : "Login"}
               </button>
 
               <div className="text-center mt-4">
                 Don&apos;t have an account yet?{" "}
                 <Link to="/register">
-                  <span className="  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
+                  <span className="inline-block hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
                     Register
                   </span>
                 </Link>

@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
@@ -12,8 +13,39 @@ const initialValues = {
   password: "",
 };
 
+const registerUser = async (values: {
+  name: string;
+  email: string;
+  password: string;
+}) => {
+  const { data, error } = await supabase.auth.signUp({
+    options: {
+      data: {
+        name: values.name,
+      },
+    },
+    email: values.email,
+    password: values.password,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
 const Register = () => {
   const navigate = useNavigate();
+
+  const mutation = useMutation(registerUser, {
+    onSuccess: () => {
+      navigate("/app", { replace: true });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
 
   const validationSchema = Yup.object({
     name: Yup.string().required("This field is required"),
@@ -28,22 +60,8 @@ const Register = () => {
   const form = useFormik({
     validationSchema,
     initialValues,
-    onSubmit: async (values) => {
-      const req = await supabase.auth.signUp({
-        options: {
-          data: {
-            name: values.name,
-          },
-        },
-        email: values.email,
-        password: values.password,
-      });
-
-      if (req.error) {
-        console.log(req.error);
-      } else {
-        navigate("/app", { replace: true });
-      }
+    onSubmit: (values) => {
+      mutation.mutate(values);
 
       setTimeout(() => {
         form.setSubmitting(false);
