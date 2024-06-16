@@ -25,10 +25,11 @@ const LeftSideBar = () => {
               src="/logo192.png"
               alt="DashWind Logo"
             />
-            DashWind
+            Dashboard Admin
           </Link>{" "}
         </li>
         {appRoutes.map((route) => {
+          if (!route.name) return null;
           return (
             <li className="" key={route.name}>
               {route.children ? (

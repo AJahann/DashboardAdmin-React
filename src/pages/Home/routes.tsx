@@ -26,11 +26,13 @@ import Leads from "./Leads";
 import Profile from "./Profile";
 import Team from "./Team";
 import Transactions from "./Transactions";
+import Welcome from "./Welcome";
 
 const iconClasses = `h-6 w-6`;
 const submenuIconClasses = `h-5 w-5`;
 
 const appRoutes = [
+  { path: "", element: <Welcome /> },
   {
     path: "/app/dashboard",
     icon: <Squares2X2Icon className={iconClasses} />,
