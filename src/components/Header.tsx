@@ -3,7 +3,7 @@ import Bars3Icon from "@heroicons/react/24/outline/Bars3Icon";
 import BellIcon from "@heroicons/react/24/outline/BellIcon";
 import MoonIcon from "@heroicons/react/24/outline/MoonIcon";
 import SunIcon from "@heroicons/react/24/outline/SunIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 // import { openRightDrawer } from "../features/common/rightDrawerSlice";
@@ -11,8 +11,20 @@ import { useLocation } from "react-router-dom";
 
 const Header = () => {
   const location = useLocation();
-  const [currentTheme] = useState("dark");
+  const [currentTheme, setCurrentTheme] = useState(false); // false => dark
   const [noOfNotifications] = useState(10);
+
+  useEffect(() => {
+    if (currentTheme) {
+      document
+        .getElementsByTagName("html")[0]
+        .setAttribute("data-theme", "light");
+    } else {
+      document
+        .getElementsByTagName("html")[0]
+        .setAttribute("data-theme", "dark");
+    }
+  }, [currentTheme]);
 
   return (
     <div className="navbar sticky top-0 bg-base-100  z-10 shadow-md ">
@@ -31,19 +43,22 @@ const Header = () => {
 
       <div className="flex-none ">
         <label className="swap">
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            onClick={() => setCurrentTheme(!currentTheme)}
+          />
           <SunIcon
             data-set-theme="light"
             data-act-class="ACTIVECLASS"
             className={`fill-current w-6 h-6 ${
-              currentTheme === "dark" ? "swap-on" : "swap-off"
+              !currentTheme ? "swap-on" : "swap-off"
             }`}
           />
           <MoonIcon
             data-set-theme="dark"
             data-act-class="ACTIVECLASS"
             className={`fill-current w-6 h-6 ${
-              currentTheme === "light" ? "swap-on" : "swap-off"
+              currentTheme ? "swap-on" : "swap-off"
             }`}
           />
         </label>
