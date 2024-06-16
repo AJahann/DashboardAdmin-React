@@ -4,11 +4,13 @@ import BellIcon from "@heroicons/react/24/outline/BellIcon";
 import MoonIcon from "@heroicons/react/24/outline/MoonIcon";
 import SunIcon from "@heroicons/react/24/outline/SunIcon";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 // import { openRightDrawer } from "../features/common/rightDrawerSlice";
 // import { RIGHT_DRAWER_TYPES } from "../utils/globalConstantUtil";
 
 const Header = () => {
+  const location = useLocation();
   const [currentTheme] = useState("dark");
   const [noOfNotifications] = useState(10);
 
@@ -22,7 +24,9 @@ const Header = () => {
         >
           <Bars3Icon className="h-5 inline-block w-5" />
         </label>
-        <h1 className="text-2xl font-semibold ml-2">this is a page title</h1>
+        <h1 className="text-2xl font-semibold ml-2 capitalize">
+          {location.pathname.split("/")[2] || "Welcome"}
+        </h1>
       </div>
 
       <div className="flex-none ">
