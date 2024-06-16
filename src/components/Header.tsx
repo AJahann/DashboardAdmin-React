@@ -51,15 +51,13 @@ const Header = () => {
             data-set-theme="light"
             data-act-class="ACTIVECLASS"
             className={`fill-current w-6 h-6 ${
-              !currentTheme ? "swap-on" : "swap-off"
+              currentTheme ? "" : "opacity-0"
             }`}
           />
           <MoonIcon
             data-set-theme="dark"
             data-act-class="ACTIVECLASS"
-            className={`fill-current w-6 h-6 ${
-              currentTheme ? "swap-on" : "swap-off"
-            }`}
+            className={`fill-current w-6 h-6 ${currentTheme ? "opacity-0" : ""}`}
           />
         </label>
 
