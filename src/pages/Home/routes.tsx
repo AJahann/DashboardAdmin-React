@@ -18,11 +18,11 @@ import WalletIcon from "@heroicons/react/24/outline/WalletIcon";
 import { Navigate } from "react-router-dom";
 
 import Page404 from "./404";
+import Admins from "./Admins";
 import Charts from "./Analytics";
 import Billing from "./Billing";
 import Calendar from "./Calendar";
 import Dashboard from "./Dashboard";
-import Leads from "./Leads";
 import Profile from "./Profile";
 import Team from "./Team";
 import Transactions from "./Transactions";
@@ -40,10 +40,10 @@ const appRoutes = [
     name: "Dashboard",
   },
   {
-    path: "/app/leads",
+    path: "/app/admins",
     icon: <InboxArrowDownIcon className={iconClasses} />,
-    name: "Leads",
-    element: <Leads />,
+    name: "Admins",
+    element: <Admins />,
   },
   {
     path: "/app/transactions",

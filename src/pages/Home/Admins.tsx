@@ -2,7 +2,7 @@ import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
 
 import TitleCard from "../../components/ui/TitleCard";
 
-const leads = {
+const admins = {
   page: 2,
   per_page: 6,
   total: 12,
@@ -63,7 +63,7 @@ const TopSideButtons = () => {
   );
 };
 
-const Leads = () => {
+const Admins = () => {
   const getDummyStatus = (index: number) => {
     if (index % 5 === 0) return <div className="badge">Not Interested</div>;
     else if (index % 5 === 1)
@@ -77,11 +77,11 @@ const Leads = () => {
 
   return (
     <TitleCard
-      title="Current Leads"
+      title="Current Admins"
       topMargin="mt-2"
       TopSideButtons={<TopSideButtons />}
     >
-      {/* Leads List in table format loaded from slice after api call */}
+      {/* Admins List in table format loaded from slice after api call */}
       <div className="overflow-x-auto w-full">
         <table className="table w-full">
           <thead>
@@ -95,7 +95,7 @@ const Leads = () => {
             </tr>
           </thead>
           <tbody>
-            {leads.data.map((l, k) => {
+            {admins.data.map((l, k) => {
               return (
                 <tr key={l.id}>
                   <td>
@@ -130,4 +130,4 @@ const Leads = () => {
   );
 };
 
-export default Leads;
+export default Admins;
