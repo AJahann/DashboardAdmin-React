@@ -5,6 +5,7 @@ import LeftSideBar from "../components/LeftSideBar";
 import PageContent from "../components/PageContent";
 import RightSidebar from "../components/RightSideBar";
 import supabase from "../utils/supapase";
+import ModalLayout from "./ModalLayout";
 
 const Layouts = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const Layouts = () => {
 
       <RightSidebar />
 
-      {/* <ModalLayout /> */}
+      <ModalLayout />
     </>
   );
 };
