@@ -1,6 +1,8 @@
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
+import { useQuery } from "react-query";
 
 import TitleCard from "../../components/ui/TitleCard";
+// import supabase from "../../utils/supapase";
 
 const admins = {
   page: 2,
@@ -53,33 +55,87 @@ const admins = {
   ],
 };
 
-const TopSideButtons = () => {
+const TopSideButtons = ({ onClick }: { onClick: () => void }) => {
   return (
     <div className="inline-block float-right">
-      <button className="btn px-6 btn-sm normal-case btn-primary">
+      <button
+        onClick={onClick}
+        className="btn px-6 btn-sm normal-case btn-primary"
+      >
         Add New
       </button>
     </div>
   );
 };
 
+const reqGetUsers = async () => {
+  try {
+    const response = await fetch("http://localhost:3000/get-allUsers", {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ page: 1, perPage: 10 }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    } else {
+      throw new Error(data.error);
+    }
+  } catch (error) {
+    console.error("Error creating user:", error);
+  }
+};
+
 const Admins = () => {
-  const getDummyStatus = (index: number) => {
-    if (index % 5 === 0) return <div className="badge">Not Interested</div>;
-    else if (index % 5 === 1)
-      return <div className="badge badge-primary">In Progress</div>;
-    else if (index % 5 === 2)
-      return <div className="badge badge-secondary">Sold</div>;
-    else if (index % 5 === 3)
-      return <div className="badge badge-accent">Need Followup</div>;
-    else return <div className="badge badge-ghost">Open</div>;
+  const getUsers = useQuery(["users"], reqGetUsers, {
+    staleTime: Infinity,
+  });
+
+  const addNewAdmin = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/create-user", {
+        mode: "cors",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "alii@gmail.com",
+          password: "aliiiiii",
+          name: "babak",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("User created successfully:", data);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      console.error("Error creating user:", error);
+    }
   };
+
+  if (getUsers.isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (getUsers.isError) {
+    return <p>Oops something went wrong!</p>;
+  }
 
   return (
     <TitleCard
       title="Current Admins"
       topMargin="mt-2"
-      TopSideButtons={<TopSideButtons />}
+      TopSideButtons={<TopSideButtons onClick={addNewAdmin} />}
     >
       {/* Admins List in table format loaded from slice after api call */}
       <div className="overflow-x-auto w-full">
@@ -88,33 +144,40 @@ const Admins = () => {
             <tr>
               <th>Name</th>
               <th>Email Id</th>
-              <th>Created At</th>
+              <th>Joined At</th>
               <th>Status</th>
               <th>Assigned To</th>
               <th />
             </tr>
           </thead>
           <tbody>
-            {admins.data.map((l, k) => {
+            {getUsers.data?.data.users.map((user: unknown) => {
+              const { email, created_at } = user;
+              const { name, last_name, assignedTo, status, url } =
+                user.user_metadata;
+
               return (
-                <tr key={l.id}>
+                <tr key={user.id}>
                   <td>
                     <div className="flex items-center space-x-3">
                       <div className="avatar">
                         <div className="mask mask-squircle w-12 h-12">
-                          <img src={l.avatar} alt="Avatar" />
+                          <img
+                            src={"https://reqres.in/img/faces/7-image.jpg"}
+                            alt="Avatar"
+                          />
                         </div>
                       </div>
                       <div>
-                        <div className="font-bold">{l.first_name}</div>
-                        <div className="text-sm opacity-50">{l.last_name}</div>
+                        <div className="font-bold">{name}</div>
+                        <div className="text-sm opacity-50">{"last naame"}</div>
                       </div>
                     </div>
                   </td>
-                  <td>{l.email}</td>
-                  <td>30 May 24</td>
-                  <td>{getDummyStatus(k)}</td>
-                  <td>{l.last_name}</td>
+                  <td>{email}</td>
+                  <td>{created_at.split("T")[0]}</td>
+                  <td>{status}</td>
+                  <td>{assignedTo}</td>
                   <td>
                     <button className="btn btn-square btn-ghost">
                       <TrashIcon className="w-5" />
