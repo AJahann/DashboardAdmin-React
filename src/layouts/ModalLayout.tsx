@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import ConfirmationModalBody from "../features/components/ConfirmationModalBody";
+import AddAdminModalBody from "../features/admins/AddAdminModalBody";
 
 const ModalLayout = () => {
-  const [isOpen] = useState(true);
+  const [isOpen] = useState(false);
 
   return (
     <div className={`modal ${isOpen ? "modal-open" : ""}`}>
@@ -15,8 +15,7 @@ const ModalLayout = () => {
           ✕
         </button>
         <h3 className="font-semibold text-2xl pb-6 text-center">{"title"}</h3>
-
-        <ConfirmationModalBody />
+        <AddAdminModalBody />
       </div>
     </div>
   );

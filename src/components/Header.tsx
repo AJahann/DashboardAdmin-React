@@ -4,18 +4,25 @@ import BellIcon from "@heroicons/react/24/outline/BellIcon";
 import MoonIcon from "@heroicons/react/24/outline/MoonIcon";
 import SunIcon from "@heroicons/react/24/outline/SunIcon";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+
+import { dark, light, selectTheme } from "../features/theme/ChangeTheme";
+import type { AppDispatch } from "../store/Store";
 
 // import { openRightDrawer } from "../features/common/rightDrawerSlice";
 // import { RIGHT_DRAWER_TYPES } from "../utils/globalConstantUtil";
 
 const Header = () => {
+  const isLightMode = useSelector(selectTheme);
+  const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-  const [currentTheme, setCurrentTheme] = useState(false); // false => dark
   const [noOfNotifications] = useState(10);
 
   useEffect(() => {
-    if (currentTheme) {
+    console.log(isLightMode);
+
+    if (isLightMode) {
       document
         .getElementsByTagName("html")[0]
         .setAttribute("data-theme", "light");
@@ -24,7 +31,7 @@ const Header = () => {
         .getElementsByTagName("html")[0]
         .setAttribute("data-theme", "dark");
     }
-  }, [currentTheme]);
+  }, [isLightMode]);
 
   return (
     <div className="navbar sticky top-0 bg-base-100  z-10 shadow-md ">
@@ -45,19 +52,17 @@ const Header = () => {
         <label className="swap">
           <input
             type="checkbox"
-            onClick={() => setCurrentTheme(!currentTheme)}
+            onClick={() => dispatch(isLightMode ? dark() : light())}
           />
           <SunIcon
             data-set-theme="light"
             data-act-class="ACTIVECLASS"
-            className={`fill-current w-6 h-6 ${
-              currentTheme ? "" : "opacity-0"
-            }`}
+            className={`fill-current w-6 h-6 ${isLightMode ? "" : "opacity-0"}`}
           />
           <MoonIcon
             data-set-theme="dark"
             data-act-class="ACTIVECLASS"
-            className={`fill-current w-6 h-6 ${currentTheme ? "opacity-0" : ""}`}
+            className={`fill-current w-6 h-6 ${isLightMode ? "opacity-0" : ""}`}
           />
         </label>
 
