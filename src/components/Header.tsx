@@ -5,17 +5,23 @@ import MoonIcon from "@heroicons/react/24/outline/MoonIcon";
 import SunIcon from "@heroicons/react/24/outline/SunIcon";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { openNotifBar } from "../features/notifBar/NotifBar";
 import { dark, light, selectTheme } from "../features/theme/ChangeTheme";
 import type { AppDispatch } from "../store/Store";
 
 const Header = () => {
+  const navigate = useNavigate();
   const isLightMode = useSelector(selectTheme);
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
   const [noOfNotifications] = useState(10);
+
+  const logoutHandle = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
 
   useEffect(() => {
     if (isLightMode) {
@@ -81,7 +87,7 @@ const Header = () => {
         <div className="dropdown dropdown-end ml-4">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
             <div className="w-10 rounded-full">
-              <img src="https://placeimg.com/80/80/people" alt="profile" />
+              <img src="https://avatar.iran.liara.run/public" alt="profile" />
             </div>
           </label>
           <ul
@@ -89,17 +95,16 @@ const Header = () => {
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li className="justify-between">
-              <a href="/">
+              <Link to="settings-profile">
                 Profile Settings
                 <span className="badge">New</span>
-              </a>
-            </li>
-            <li className="">
-              <a href="/">Bill History</a>
+              </Link>
             </li>
             <div className="divider mt-0 mb-0" />
             <li>
-              <a href="/">Logout</a>
+              <button onClick={logoutHandle}>
+                <p>Logout</p>
+              </button>
             </li>
           </ul>
         </div>

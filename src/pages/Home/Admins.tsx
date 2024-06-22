@@ -1,59 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/naming-convention */
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
 import { useQuery } from "react-query";
+import { useDispatch } from "react-redux";
 
 import TitleCard from "../../components/ui/TitleCard";
-// import supabase from "../../utils/supapase";
-
-const admins = {
-  page: 2,
-  per_page: 6,
-  total: 12,
-  total_pages: 2,
-  data: [
-    {
-      id: 7,
-      email: "michael.lawson@reqres.in",
-      first_name: "Michael",
-      last_name: "Lawson",
-      avatar: "https://reqres.in/img/faces/7-image.jpg",
-    },
-    {
-      id: 8,
-      email: "lindsay.ferguson@reqres.in",
-      first_name: "Lindsay",
-      last_name: "Ferguson",
-      avatar: "https://reqres.in/img/faces/8-image.jpg",
-    },
-    {
-      id: 9,
-      email: "tobias.funke@reqres.in",
-      first_name: "Tobias",
-      last_name: "Funke",
-      avatar: "https://reqres.in/img/faces/9-image.jpg",
-    },
-    {
-      id: 10,
-      email: "byron.fields@reqres.in",
-      first_name: "Byron",
-      last_name: "Fields",
-      avatar: "https://reqres.in/img/faces/10-image.jpg",
-    },
-    {
-      id: 11,
-      email: "george.edwards@reqres.in",
-      first_name: "George",
-      last_name: "Edwards",
-      avatar: "https://reqres.in/img/faces/11-image.jpg",
-    },
-    {
-      id: 12,
-      email: "rachel.howell@reqres.in",
-      first_name: "Rachel",
-      last_name: "Howell",
-      avatar: "https://reqres.in/img/faces/12-image.jpg",
-    },
-  ],
-};
+import { openModal } from "../../features/modal/Modal";
+import type { AppDispatch } from "../../store/Store";
 
 const TopSideButtons = ({ onClick }: { onClick: () => void }) => {
   return (
@@ -70,13 +23,13 @@ const TopSideButtons = ({ onClick }: { onClick: () => void }) => {
 
 const reqGetUsers = async () => {
   try {
-    const response = await fetch("http://localhost:3000/get-allUsers", {
+    const response = await fetch("http://localhost:3000/get-admins", {
       mode: "cors",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ page: 1, perPage: 10 }),
+      body: JSON.stringify({ page: 1, perPage: 20 }),
     });
 
     const data = await response.json();
@@ -92,42 +45,16 @@ const reqGetUsers = async () => {
 };
 
 const Admins = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const getUsers = useQuery(["users"], reqGetUsers, {
     staleTime: Infinity,
   });
-
-  const addNewAdmin = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/create-user", {
-        mode: "cors",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: "alii@gmail.com",
-          password: "aliiiiii",
-          name: "babak",
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log("User created successfully:", data);
-      } else {
-        throw new Error(data.error);
-      }
-    } catch (error) {
-      console.error("Error creating user:", error);
-    }
-  };
 
   if (getUsers.isLoading) {
     return <p>Loading...</p>;
   }
 
-  if (getUsers.isError) {
+  if (getUsers.error) {
     return <p>Oops something went wrong!</p>;
   }
 
@@ -135,59 +62,72 @@ const Admins = () => {
     <TitleCard
       title="Current Admins"
       topMargin="mt-2"
-      TopSideButtons={<TopSideButtons onClick={addNewAdmin} />}
+      TopSideButtons={
+        <TopSideButtons
+          onClick={() => {
+            dispatch(openModal());
+          }}
+        />
+      }
     >
-      {/* Admins List in table format loaded from slice after api call */}
       <div className="overflow-x-auto w-full">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email Id</th>
-              <th>Joined At</th>
-              <th>Status</th>
-              <th>Assigned To</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {getUsers.data?.data.users.map((user: unknown) => {
-              const { email, created_at } = user;
-              const { name, last_name, assignedTo, status, url } =
-                user.user_metadata;
+        {getUsers.data?.data.length ? (
+          <table className="table w-full">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email Id</th>
+                <th>Joined At</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {getUsers.data.data.map((user: any) => {
+                const { email, created_at } = user;
+                const { name, lastName, assignedTo, status } =
+                  user.user_metadata;
 
-              return (
-                <tr key={user.id}>
-                  <td>
-                    <div className="flex items-center space-x-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
-                          <img
-                            src={"https://reqres.in/img/faces/7-image.jpg"}
-                            alt="Avatar"
-                          />
+                return (
+                  <tr key={user.id}>
+                    <td>
+                      <div className="flex items-center space-x-3">
+                        <div className="avatar">
+                          <div className="mask mask-squircle w-12 h-12">
+                            <img
+                              src="https://avatar.iran.liara.run/public"
+                              alt="Avatar"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="font-bold">{name}</div>
+                          <div className="text-sm opacity-50">{lastName}</div>
                         </div>
                       </div>
-                      <div>
-                        <div className="font-bold">{name}</div>
-                        <div className="text-sm opacity-50">{"last naame"}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>{email}</td>
-                  <td>{created_at.split("T")[0]}</td>
-                  <td>{status}</td>
-                  <td>{assignedTo}</td>
-                  <td>
-                    <button className="btn btn-square btn-ghost">
-                      <TrashIcon className="w-5" />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    </td>
+                    <td>{email}</td>
+                    <td>{created_at.split("T")[0]}</td>
+                    <td>
+                      <span className="badge badge-ghost p-4 -ml-4">
+                        {status}
+                      </span>
+                    </td>
+                    <td>{assignedTo}</td>
+                    <td>
+                      <button className="btn btn-square btn-ghost">
+                        <TrashIcon className="w-5" />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <h2 className="w-full text-center text-2xl">Oops no admin here...</h2>
+        )}
       </div>
     </TitleCard>
   );
