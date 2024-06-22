@@ -1,12 +1,16 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import XMarkIcon from "@heroicons/react/24/solid/XMarkIcon";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { closeNotifBar, selectNotifBar } from "../features/notifBar/NotifBar";
+import type { AppDispatch } from "../store/Store";
 
 const RightSidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = useSelector(selectNotifBar);
+  const dispatch = useDispatch<AppDispatch>();
 
   const close = () => {
-    setIsOpen(false);
+    dispatch(closeNotifBar());
   };
 
   return (
@@ -36,7 +40,6 @@ const RightSidebar = () => {
 
           <div className="overflow-y-scroll pl-4 pr-4">
             <div className="flex flex-col w-full">
-              {/* Loading drawer body according to different drawer type */}
               {/* {
                 {
                   [RIGHT_DRAWER_TYPES.NOTIFICATION]: (

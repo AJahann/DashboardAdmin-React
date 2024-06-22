@@ -7,11 +7,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
+import { openNotifBar } from "../features/notifBar/NotifBar";
 import { dark, light, selectTheme } from "../features/theme/ChangeTheme";
 import type { AppDispatch } from "../store/Store";
-
-// import { openRightDrawer } from "../features/common/rightDrawerSlice";
-// import { RIGHT_DRAWER_TYPES } from "../utils/globalConstantUtil";
 
 const Header = () => {
   const isLightMode = useSelector(selectTheme);
@@ -20,8 +18,6 @@ const Header = () => {
   const [noOfNotifications] = useState(10);
 
   useEffect(() => {
-    console.log(isLightMode);
-
     if (isLightMode) {
       document
         .getElementsByTagName("html")[0]
@@ -67,7 +63,10 @@ const Header = () => {
         </label>
 
         {/* Notification icon */}
-        <button className="btn btn-ghost ml-4  btn-circle">
+        <button
+          onClick={() => dispatch(openNotifBar())}
+          className="btn btn-ghost ml-4  btn-circle"
+        >
           <div className="indicator">
             <BellIcon className="h-6 w-6" />
             {noOfNotifications > 0 ? (
