@@ -1,3 +1,4 @@
+import { UserGroupIcon } from "@heroicons/react/24/outline";
 import ArrowRightOnRectangleIcon from "@heroicons/react/24/outline/ArrowRightOnRectangleIcon";
 import BoltIcon from "@heroicons/react/24/outline/BoltIcon";
 import CalendarDaysIcon from "@heroicons/react/24/outline/CalendarDaysIcon";
@@ -8,7 +9,6 @@ import CurrencyDollarIcon from "@heroicons/react/24/outline/CurrencyDollarIcon";
 import DocumentDuplicateIcon from "@heroicons/react/24/outline/DocumentDuplicateIcon";
 import DocumentTextIcon from "@heroicons/react/24/outline/DocumentTextIcon";
 import ExclamationTriangleIcon from "@heroicons/react/24/outline/ExclamationTriangleIcon";
-import InboxArrowDownIcon from "@heroicons/react/24/outline/InboxArrowDownIcon";
 import KeyIcon from "@heroicons/react/24/outline/KeyIcon";
 import Squares2X2Icon from "@heroicons/react/24/outline/Squares2X2Icon";
 import TableCellsIcon from "@heroicons/react/24/outline/TableCellsIcon";
@@ -41,7 +41,7 @@ const appRoutes = [
   },
   {
     path: "/app/admins",
-    icon: <InboxArrowDownIcon className={iconClasses} />,
+    icon: <UserGroupIcon className={iconClasses} />,
     name: "Admins",
     element: <Admins />,
   },
