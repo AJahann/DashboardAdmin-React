@@ -1,18 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/naming-convention */
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
 import { useQuery } from "react-query";
 import { useDispatch } from "react-redux";
 
 import TitleCard from "../../components/ui/TitleCard";
 import { openModal } from "../../features/modal/Modal";
+import { adminsApi } from "../../services/axions/api";
 import type { AppDispatch } from "../../store/Store";
 
-const TopSideButtons = ({ onClick }: { onClick: () => void }) => {
+interface TopSideButtons {
+  openModalBtn: () => void;
+  reFetch: () => void;
+}
+
+const TopSideButtons = ({ openModalBtn, reFetch }: TopSideButtons) => {
   return (
-    <div className="inline-block float-right">
+    <div className="flex items-center gap-2">
+      <button className="btn btn-ghost btn-sm normal-case" onClick={reFetch}>
+        <ArrowPathIcon className="w-4 mr-2" />
+        Refresh Data
+      </button>
       <button
-        onClick={onClick}
+        onClick={openModalBtn}
         className="btn px-6 btn-sm normal-case btn-primary"
       >
         Add New
@@ -21,40 +32,47 @@ const TopSideButtons = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-const reqGetUsers = async () => {
+const reqGetAdmins = async () => {
   try {
-    const response = await fetch("http://localhost:3000/get-admins", {
-      mode: "cors",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ page: 1, perPage: 20 }),
+    const response = await adminsApi.post("/get-admins", {
+      page: 1,
+      perPage: 20,
     });
 
-    const data = await response.json();
-
-    if (response.ok) {
-      return data;
+    if (response.status === 200) {
+      return response.data;
     } else {
-      throw new Error(data.error);
+      throw new Error(response.data.error);
     }
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error fetching users:", error);
+    throw error as Error;
   }
 };
 
 const Admins = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const getUsers = useQuery(["users"], reqGetUsers, {
+  const { data, isLoading, error, refetch } = useQuery("users", reqGetAdmins, {
     staleTime: Infinity,
   });
 
-  if (getUsers.isLoading) {
+  const removeAdmin = async (id: string) => {
+    try {
+      const res = await adminsApi.post(`/remove-admin`, { id });
+
+      if (res.status === 200) {
+        await refetch();
+      }
+    } catch (err) {
+      console.error("Error removing admin:", err);
+    }
+  };
+
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  if (getUsers.error) {
+  if (error) {
     return <p>Oops something went wrong!</p>;
   }
 
@@ -64,14 +82,15 @@ const Admins = () => {
       topMargin="mt-2"
       TopSideButtons={
         <TopSideButtons
-          onClick={() => {
+          reFetch={refetch}
+          openModalBtn={() => {
             dispatch(openModal());
           }}
         />
       }
     >
       <div className="overflow-x-auto w-full">
-        {getUsers.data?.data.length ? (
+        {data?.data.length ? (
           <table className="table w-full">
             <thead>
               <tr>
@@ -84,8 +103,8 @@ const Admins = () => {
               </tr>
             </thead>
             <tbody>
-              {getUsers.data.data.map((user: any) => {
-                const { email, created_at } = user;
+              {data.data.map((user: any) => {
+                const { id, email, created_at } = user;
                 const { name, lastName, assignedTo, status } =
                   user.user_metadata;
 
@@ -116,7 +135,12 @@ const Admins = () => {
                     </td>
                     <td>{assignedTo}</td>
                     <td>
-                      <button className="btn btn-square btn-ghost">
+                      <button
+                        onClick={async () => {
+                          await removeAdmin(id);
+                        }}
+                        className="btn btn-square btn-ghost"
+                      >
                         <TrashIcon className="w-5" />
                       </button>
                     </td>
