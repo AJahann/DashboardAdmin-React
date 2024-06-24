@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
 import InputText from "../../components/InputText";
+import { adminsApi } from "../../services/axions/api";
 import type { AppDispatch } from "../../store/Store";
 import { closeModal } from "../modal/Modal";
 
@@ -32,25 +33,18 @@ const AddAdminModalBody = () => {
     initialValues,
     onSubmit: async (values) => {
       try {
-        const response = await fetch("http://localhost:3000/add-admin", {
-          mode: "cors",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        const response = await adminsApi.post("/add-admin", {
+          email: values.email,
+          password: values.password,
+          user_metadata: {
+            name: values.name,
+            lastName: values.lastName,
           },
-          body: JSON.stringify({
-            email: values.email,
-            password: values.password,
-            user_metadata: {
-              name: values.name,
-              lastName: values.lastName,
-            },
-          }),
         });
 
-        const data = await response.json();
+        const data = await response.data;
 
-        if (response.ok) {
+        if (response.status === 200) {
           console.log("Admin created successfully:", data);
         } else {
           throw new Error(data.error);
