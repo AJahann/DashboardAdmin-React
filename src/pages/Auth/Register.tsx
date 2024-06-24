@@ -61,7 +61,8 @@ const Register = () => {
     validationSchema,
     initialValues,
     onSubmit: (values) => {
-      mutation.mutate(values);
+      // disable register process
+      // mutation.mutate(values);
 
       setTimeout(() => {
         form.setSubmitting(false);
@@ -122,12 +123,17 @@ const Register = () => {
               </div>
 
               <button
-                disabled={form.isSubmitting}
+                disabled
                 type="submit"
                 className="btn mt-2 w-full btn-primary"
               >
                 {form.isSubmitting ? "Loading..." : "Register"}
               </button>
+
+              <div className="text-center m-2 text-red-500">
+                <h2>Sorry we can&apos;t get new Admin :)</h2>
+                <h3>please use login instead</h3>
+              </div>
 
               <div className="text-center mt-4">
                 Already have an account?{" "}
