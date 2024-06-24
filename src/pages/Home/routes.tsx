@@ -26,6 +26,7 @@ import Dashboard from "./Dashboard";
 import Profile from "./Profile";
 import Team from "./Team";
 import Transactions from "./Transactions";
+import Users from "./Users";
 import Welcome from "./Welcome";
 
 const iconClasses = `h-6 w-6`;
@@ -41,9 +42,15 @@ const appRoutes = [
   },
   {
     path: "/app/admins",
-    icon: <UserGroupIcon className={iconClasses} />,
+    icon: <UsersIcon className={iconClasses} />,
     name: "Admins",
     element: <Admins />,
+  },
+  {
+    path: "/app/users",
+    icon: <UserGroupIcon className={iconClasses} />,
+    name: "users",
+    element: <Users />,
   },
   {
     path: "/app/transactions",

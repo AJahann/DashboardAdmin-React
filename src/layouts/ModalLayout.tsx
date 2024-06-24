@@ -1,12 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import AddAdminModalBody from "../features/admins/AddAdminModalBody";
-import { closeModal, modalStatus } from "../features/modal/Modal";
-import type { AppDispatch } from "../store/Store";
+import { closeModal } from "../features/modal/Modal";
+import AddUserModalBody from "../features/users/AddUserModalBody";
+import type { AppDispatch, RootState } from "../store/Store";
 
 const ModalLayout = () => {
-  const isOpen = useSelector(modalStatus);
+  const modalConfig = useSelector((state: RootState) => state.modal);
   const dispatch = useDispatch<AppDispatch>();
+
+  const isOpen = modalConfig.status;
+  const modalFor = modalConfig.modalFor;
 
   return (
     <div className={`modal ${isOpen ? "modal-open" : ""}`}>
@@ -18,9 +22,11 @@ const ModalLayout = () => {
           ✕
         </button>
         <h3 className="font-semibold text-2xl pb-6 text-center">
-          Add New Admin
+          {modalFor === "ADD_NEW_ADMIN" ? "Add New Admin" : "Add New User"}
         </h3>
-        <AddAdminModalBody />
+
+        {modalFor === "ADD_NEW_ADMIN" && <AddAdminModalBody />}
+        {modalFor === "ADD_NEW_USER" && <AddUserModalBody />}
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import TitleCard from "../../components/ui/TitleCard";
 import { openModal } from "../../features/modal/Modal";
 import { adminsApi } from "../../services/axions/api";
 import type { AppDispatch } from "../../store/Store";
+import { months } from "../../utils/months";
 
 interface TopSideButtons {
   openModalBtn: () => void;
@@ -32,9 +33,9 @@ const TopSideButtons = ({ openModalBtn, reFetch }: TopSideButtons) => {
   );
 };
 
-const reqGetAdmins = async () => {
+const reqGetUsers = async () => {
   try {
-    const response = await adminsApi.post("/get-admins", {
+    const response = await adminsApi.post("/get-users", {
       page: 1,
       perPage: 20,
     });
@@ -50,15 +51,15 @@ const reqGetAdmins = async () => {
   }
 };
 
-const Admins = () => {
+const Users = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data, isLoading, error, refetch } = useQuery("admins", reqGetAdmins, {
+  const { data, isLoading, error, refetch } = useQuery("users", reqGetUsers, {
     staleTime: Infinity,
   });
 
-  const removeAdmin = async (id: string) => {
+  const removeUser = async (id: string) => {
     try {
-      const res = await adminsApi.post(`/remove-admin`, { id });
+      const res = await adminsApi.post(`/remove-user`, { id });
 
       if (res.status === 200) {
         await refetch();
@@ -78,13 +79,13 @@ const Admins = () => {
 
   return (
     <TitleCard
-      title="Current Admins"
+      title="User List"
       topMargin="mt-2"
       TopSideButtons={
         <TopSideButtons
           reFetch={refetch}
           openModalBtn={() => {
-            dispatch(openModal());
+            dispatch(openModal("ADD_NEW_USER"));
           }}
         />
       }
@@ -95,21 +96,20 @@ const Admins = () => {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Email Id</th>
+                <th>Phone Number</th>
                 <th>Joined At</th>
-                <th>Status</th>
-                <th>Assigned To</th>
+                <th>Location</th>
+                <th>Deposit</th>
                 <th />
               </tr>
             </thead>
             <tbody>
-              {data.data.map((admin: any) => {
-                const { id, email, created_at } = admin;
-                const { name, lastName, assignedTo, status } =
-                  admin.user_metadata;
+              {data.data.map((user: any) => {
+                const { id, phone, created_at } = user;
+                const { name, lastName, location, pocket } = user.user_metadata;
 
                 return (
-                  <tr key={admin.id}>
+                  <tr key={user.id}>
                     <td>
                       <div className="flex items-center space-x-3">
                         <div className="avatar">
@@ -126,18 +126,19 @@ const Admins = () => {
                         </div>
                       </div>
                     </td>
-                    <td>{email}</td>
-                    <td>{created_at.split("T")[0]}</td>
+                    <td>+98-{phone.slice(2)}</td>
                     <td>
-                      <span className="badge badge-ghost p-4 -ml-4">
-                        {status}
+                      <span className="mr-1">
+                        {months[created_at.split("-")[1] - 1]}
                       </span>
+                      <span>{created_at.split("-")[2].split("T")[0]}</span>
                     </td>
-                    <td>{assignedTo}</td>
+                    <td>{location}</td>
+                    <td>${pocket?.walletBalance}</td>
                     <td>
                       <button
                         onClick={async () => {
-                          await removeAdmin(id);
+                          await removeUser(id);
                         }}
                         className="btn btn-square btn-ghost"
                       >
@@ -157,4 +158,4 @@ const Admins = () => {
   );
 };
 
-export default Admins;
+export default Users;

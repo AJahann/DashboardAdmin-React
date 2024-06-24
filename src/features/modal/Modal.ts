@@ -1,26 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import type { RootState } from "../../store/Store";
-
-const initialState: { value: boolean } = {
-  value: false,
+const initialState: { status: boolean; modalFor: string } = {
+  status: false,
+  modalFor: "",
 };
 
 export const modal = createSlice({
   name: "modal",
   initialState,
   reducers: {
-    openModal: (state) => {
-      state.value = true;
+    openModal: (state, action) => {
+      state.modalFor = action.payload;
+      state.status = true;
     },
     closeModal: (state) => {
-      state.value = false;
+      state.status = false;
     },
   },
 });
 
 export const { openModal, closeModal } = modal.actions;
-
-export const modalStatus = (state: RootState) => state.modal.value;
 
 export default modal.reducer;
