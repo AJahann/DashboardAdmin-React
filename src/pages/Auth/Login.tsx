@@ -8,7 +8,7 @@ import LandingIntro from "./LoginIntro";
 
 const initialValues = {
   email: "nedapornejad@gmail.com",
-  password: "	nedapornejad",
+  password: "nedapornejad",
 };
 
 const loginUser = async (values: { email: string; password: string }) => {
