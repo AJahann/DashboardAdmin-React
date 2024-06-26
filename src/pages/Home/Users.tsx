@@ -128,7 +128,7 @@ const Users = () => {
                         </div>
                       </div>
                     </td>
-                    <td>+98-{phone.slice(2)}</td>
+                    <td>+98-{phone.slice(3)}</td>
                     <td>
                       <span className="mr-1">
                         {months[created_at.split("-")[1] - 1]}
