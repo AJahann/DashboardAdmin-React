@@ -53,9 +53,11 @@ const reqGetUsers = async () => {
 
 const Users = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data, isLoading, error, refetch } = useQuery("users", reqGetUsers, {
-    staleTime: Infinity,
-  });
+  const { data, isLoading, error, refetch } = useQuery(
+    "users",
+    reqGetUsers,
+    {},
+  );
 
   const removeUser = async (id: string) => {
     try {

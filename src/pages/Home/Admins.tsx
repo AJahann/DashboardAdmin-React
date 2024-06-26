@@ -52,9 +52,11 @@ const reqGetAdmins = async () => {
 
 const Admins = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data, isLoading, error, refetch } = useQuery("admins", reqGetAdmins, {
-    staleTime: Infinity,
-  });
+  const { data, isLoading, error, refetch } = useQuery(
+    "admins",
+    reqGetAdmins,
+    {},
+  );
 
   const removeAdmin = async (id: string) => {
     try {
@@ -84,7 +86,7 @@ const Admins = () => {
         <TopSideButtons
           reFetch={refetch}
           openModalBtn={() => {
-            dispatch(openModal());
+            dispatch(openModal("ADD_NEW_ADMIN"));
           }}
         />
       }

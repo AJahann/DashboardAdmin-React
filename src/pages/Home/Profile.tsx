@@ -43,7 +43,6 @@ const Profile = () => {
     onSuccess: (userData) => {
       setFormInitValues(userNewInitValue(userData));
     },
-    staleTime: Infinity,
   });
 
   const form = useFormik({
