@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import { calendarState } from "../features/Calendar/CalendarState";
 import { modal } from "../features/modal/Modal";
 import { notifBarSlice } from "../features/notifBar/NotifBar";
 import { themeSlice } from "../features/theme/ChangeTheme";
@@ -9,6 +10,7 @@ export const store = configureStore({
     theme: themeSlice.reducer,
     notifBar: notifBarSlice.reducer,
     modal: modal.reducer,
+    calendar: calendarState.reducer,
   },
 });
 

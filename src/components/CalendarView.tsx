@@ -5,17 +5,29 @@ import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import weekOfYear from "dayjs/plugin/weekOfYear";
+import { useQuery } from "react-query";
+import { useDispatch } from "react-redux";
+
+import { setCelendarState } from "../features/Calendar/CalendarState";
+import type { AppDispatch } from "../store/Store";
+import supabase from "../utils/supapase";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekday);
 
-const CalendarView = () => {
+const CalendarView = ({ openModalHandle }: { openModalHandle: () => void }) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: "events",
+    queryFn: () => supabase.from("Events").select("*"),
+  });
+
+  const dispatch = useDispatch<AppDispatch>();
   const weekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
   const allDaysInMonth = () => {
     const currentDate = dayjs();
-    const start = currentDate.startOf("month").startOf("week"); // 26 start week of month
-    const end = currentDate.endOf("month").endOf("week"); // 6 end week of month
+    const start = currentDate.startOf("month").startOf("week");
+    const end = currentDate.endOf("month").endOf("week");
     const days = [];
     let day = start;
 
@@ -35,6 +47,21 @@ const CalendarView = () => {
     const currentMonth = dayjs().startOf("month");
     return currentMonth.isSame(day.startOf("month"), "month");
   };
+
+  const getEventsForCurrentDate = (day) => {
+    const eventsForCurrentDay = data?.data.filter((event) =>
+      dayjs(event.event_date).isSame(day, "day"),
+    );
+    return eventsForCurrentDay || [];
+  };
+
+  if (isLoading) {
+    return <p>isLoading...</p>;
+  }
+
+  if (error) {
+    return <p>Oops some thing went wrong!</p>;
+  }
 
   return (
     <div className="w-full  bg-base-100 p-4 rounded-lg">
@@ -57,7 +84,7 @@ const CalendarView = () => {
         </div>
         <div>
           <button className="btn  btn-sm btn-ghost btn-outline normal-case">
-            Add New Event
+            For Add New Event click on the Days
           </button>
         </div>
       </div>
@@ -77,22 +104,35 @@ const CalendarView = () => {
           return (
             // eslint-disable-next-line react/no-array-index-key
             <div key={index} className="border border-solid w-full h-28">
-              <p
-                className={`flex items-center  justify-center h-8 w-8 rounded-full mx-1 mt-1 text-sm cursor-pointer hover:bg-base-300 ${dayjs(dayjs().startOf("day")).isSame(day) ? " bg-blue-100 dark:bg-blue-400 dark:hover:bg-base-300 dark:text-white" : ""} ${isDayInCurrentMonth(day) ? "" : "text-slate-400 dark:text-slate-600"} `}
+              <button
+                onClick={() => {
+                  if (isDayInCurrentMonth(day)) {
+                    dispatch(
+                      setCelendarState({
+                        date: day.$d.toISOString(),
+                      }),
+                    );
+                    openModalHandle();
+                  }
+                }}
+                className={`flex items-center  justify-center h-8 w-8 rounded-full mx-1 mt-1 text-sm cursor-pointer hover:bg-base-300 ${
+                  dayjs(dayjs().startOf("day")).isSame(day)
+                    ? " bg-blue-100 dark:bg-blue-400 dark:hover:bg-base-300 dark:text-white"
+                    : ""
+                } ${isDayInCurrentMonth(day) ? "" : "text-slate-400 dark:text-slate-600"}`}
               >
                 {day.format("D")}
-              </p>
-              {/* {getEventsForCurrentDate(day).map((e, k) => {
+              </button>
+              {getEventsForCurrentDate(day).map((e) => {
                 return (
-                  );
                   <p
-                    key={k}
-                    onClick={() => openAllEventsDetail(day, e.theme)}
-                    className={`text-xs px-2 mt-1 truncate  ${THEME_BG[e.theme] || ""}`}
+                    key={e.id}
+                    className="text-xs px-2 mt-1 truncate bg-green-500"
                   >
                     {e.title}
                   </p>
-              })} */}
+                );
+              })}
             </div>
           );
         })}
