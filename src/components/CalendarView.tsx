@@ -127,7 +127,7 @@ const CalendarView = ({ openModalHandle }: { openModalHandle: () => void }) => {
                 return (
                   <p
                     key={e.id}
-                    className="text-xs px-2 mt-1 truncate bg-green-500"
+                    className="text-xs px-2 mt-1 truncate bg-green-500 dark:text-white dark:bg-green-700"
                   >
                     {e.title}
                   </p>
