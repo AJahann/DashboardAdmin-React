@@ -7,7 +7,7 @@ import { useQuery } from "react-query";
 import InputText from "../../components/InputText";
 import TitleCard from "../../components/ui/TitleCard";
 import ToogleInput from "../../components/ui/ToogleInput";
-import { adminsApi } from "../../services/axions/api";
+import { adminApi } from "../../services/axios/api";
 import supabase from "../../utils/supapase";
 
 const initValues = {
@@ -49,7 +49,7 @@ const Profile = () => {
     initialValues: formInitValues,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      const req = await adminsApi.post("/update-admin", {
+      const req = await adminApi.post("/update-admin", {
         id: data?.data.user?.id,
         values,
       });

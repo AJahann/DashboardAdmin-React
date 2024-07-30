@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
 import InputText from "../../components/InputText";
-import { adminsApi } from "../../services/axions/api";
+import { adminApi } from "../../services/axios/api";
 import type { AppDispatch } from "../../store/Store";
 import { closeModal } from "../modal/Modal";
 
@@ -33,7 +33,7 @@ const AddAdminModalBody = () => {
     initialValues,
     onSubmit: async (values) => {
       try {
-        const response = await adminsApi.post("/add-admin", {
+        const response = await adminApi.post("/add-admin", {
           email: values.email,
           password: values.password,
           user_metadata: {

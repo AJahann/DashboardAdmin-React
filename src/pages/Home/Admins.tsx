@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 
 import TitleCard from "../../components/ui/TitleCard";
 import { openModal } from "../../features/modal/Modal";
-import { adminsApi } from "../../services/axions/api";
+import { adminApi } from "../../services/axios/api";
 import type { AppDispatch } from "../../store/Store";
 
 interface TopSideButtons {
@@ -34,7 +34,7 @@ const TopSideButtons = ({ openModalBtn, reFetch }: TopSideButtons) => {
 
 const reqGetAdmins = async () => {
   try {
-    const response = await adminsApi.post("/get-admins", {
+    const response = await adminApi.post("/get-admins", {
       page: 1,
       perPage: 20,
     });
@@ -60,7 +60,7 @@ const Admins = () => {
 
   const removeAdmin = async (id: string) => {
     try {
-      const res = await adminsApi.post(`/remove-admin`, { id });
+      const res = await adminApi.post(`/remove-admin`, { id });
 
       if (res.status === 200) {
         await refetch();
