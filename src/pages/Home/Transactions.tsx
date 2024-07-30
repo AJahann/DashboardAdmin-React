@@ -57,8 +57,8 @@ const reqGetUsers = async () => {
   }
 };
 
-const sortActions = (users) => {
-  let actionsArr = [];
+const sortActions = (users: { data: any }) => {
+  const actionsArr = [];
 
   users.data.forEach((user) =>
     user.user_metadata.pocket.transactions.forEach((action) =>

@@ -7,8 +7,8 @@ import supabase from "../../utils/supapase";
 import LandingIntro from "./LoginIntro";
 
 const initialValues = {
-  email: "nedapornejad@gmail.com",
-  password: "nedapornejad",
+  email: "as6kan.developer@gmail.com",
+  password: "dashboard.ashkan.66",
 };
 
 const loginUser = async (values: { email: string; password: string }) => {

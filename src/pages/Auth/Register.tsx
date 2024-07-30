@@ -22,6 +22,8 @@ const registerUser = async (values: {
     options: {
       data: {
         name: values.name,
+        // role: "owner",
+        // is_owner: true,
       },
     },
     email: values.email,

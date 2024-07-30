@@ -57,6 +57,16 @@ const Admins = () => {
     reqGetAdmins,
     {},
   );
+  const isOwnerReq = useQuery({
+    queryKey: ["auth"],
+    select(res) {
+      if (res?.data.session.user.user_metadata.is_owner) {
+        return true;
+      }
+
+      return false;
+    },
+  });
 
   const removeAdmin = async (id: string) => {
     try {
@@ -86,7 +96,11 @@ const Admins = () => {
         <TopSideButtons
           reFetch={refetch}
           openModalBtn={() => {
-            dispatch(openModal("ADD_NEW_ADMIN"));
+            if (isOwnerReq.data) {
+              dispatch(openModal("ADD_NEW_ADMIN"));
+            } else {
+              dispatch(openModal("NOT_ACCESS"));
+            }
           }}
         />
       }
@@ -139,9 +153,13 @@ const Admins = () => {
                     <td>
                       <button
                         onClick={async () => {
-                          await removeAdmin(id);
+                          if (isOwnerReq.data) {
+                            await removeAdmin(id);
+                          }
                         }}
-                        className="btn btn-square btn-ghost"
+                        className={`btn btn-square btn-ghost ${
+                          isOwnerReq.data ? "" : "cursor-not-allowed"
+                        }`}
                       >
                         <TrashIcon className="w-5" />
                       </button>

@@ -26,6 +26,7 @@ const ModalLayout = () => {
           {modalFor === "ADD_NEW_ADMIN" && "Add New Admin"}
           {modalFor === "ADD_NEW_USER" && "Add New User"}
           {modalFor === "ADD_NEW_EVENT" && "Add New Event"}
+          {modalFor === "NOT_ACCESS" && "Oops!! you must be OWNER"}
         </h3>
 
         {modalFor === "ADD_NEW_ADMIN" && <AddAdminModalBody />}
