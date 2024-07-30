@@ -136,7 +136,9 @@ const Users = () => {
                       <span>{created_at.split("-")[2].split("T")[0]}</span>
                     </td>
                     <td>{location}</td>
-                    <td>${pocket?.walletBalance}</td>
+                    <td>
+                      ${parseInt(pocket?.walletBalance, 10).toLocaleString()}
+                    </td>
                     <td>
                       <button
                         onClick={async () => {
