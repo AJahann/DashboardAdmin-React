@@ -10,7 +10,7 @@ import ModalLayout from "./ModalLayout";
 const Layouts = () => {
   const navigate = useNavigate();
 
-  const query = useQuery({
+  const { isLoading, error } = useQuery({
     queryKey: ["auth"],
     queryFn: () => supabase.auth.getSession(),
     select(data) {
@@ -20,11 +20,11 @@ const Layouts = () => {
     },
   });
 
-  if (query.isLoading) {
+  if (isLoading) {
     return "Loading...";
   }
 
-  if (query.error) {
+  if (error) {
     return navigate("/login", { replace: true });
   }
 
