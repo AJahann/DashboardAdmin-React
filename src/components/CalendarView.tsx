@@ -110,7 +110,7 @@ const CalendarView = ({ openModalHandle }: { openModalHandle: () => void }) => {
       </div>
       <div className="my-4 divider" />
       <div className="grid grid-cols-7 gap-6 sm:gap-12 place-items-center">
-        {weekdays.map((day) => (
+        {(weekdays ?? []).map((day) => (
           <div className="text-xs capitalize" key={day}>
             {day}
           </div>
@@ -118,7 +118,7 @@ const CalendarView = ({ openModalHandle }: { openModalHandle: () => void }) => {
       </div>
 
       <div className="grid grid-cols-7 mt-1 place-items-center">
-        {allDaysInMonth().map((day) => (
+        {(allDaysInMonth() ?? []).map((day) => (
           <div
             key={day.format("YYYY-MM-DD")}
             className="border border-solid w-full h-28"
@@ -142,7 +142,7 @@ const CalendarView = ({ openModalHandle }: { openModalHandle: () => void }) => {
             >
               {day.format("D")}
             </button>
-            {eventsForDays[day.format("YYYY-MM-DD")].map(
+            {(eventsForDays[day.format("YYYY-MM-DD")] ?? []).map(
               (e: { id: Key | null | undefined; title: ReactNode }) => (
                 <p
                   key={e.id}
