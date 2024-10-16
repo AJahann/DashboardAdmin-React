@@ -21,11 +21,12 @@ const Layouts = () => {
   });
 
   if (isLoading) {
-    return "Loading...";
+    return <p>Loading...</p>;
   }
 
   if (error) {
-    return navigate("/login", { replace: true });
+    navigate("/login", { replace: true });
+    return <></>;
   }
 
   return (
