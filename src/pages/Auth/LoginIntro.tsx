@@ -7,7 +7,7 @@ const LandingIntro = () => {
         <div className="max-w-md">
           <h1 className="text-3xl text-center font-bold ">
             <img
-              src="./public/logo192.png"
+              src="/logo192.png"
               className="w-12 inline-block mr-2 mask mask-circle"
               alt="dashwind-logo"
             />
@@ -16,7 +16,7 @@ const LandingIntro = () => {
 
           <div className="text-center mt-12">
             <img
-              src="../public/intro.png"
+              src="/intro.png"
               alt="Dashwind Admin Template"
               className="w-48 inline-block"
             />
