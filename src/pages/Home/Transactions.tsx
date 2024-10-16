@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 // /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FunnelIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "react-query";
@@ -58,20 +60,30 @@ const reqGetUsers = async () => {
 };
 
 const sortActions = (users: { data: any }) => {
-  const actionsArr = [];
+  const actionsArr: any[] = [];
 
-  users.data.forEach((user) =>
-    user.user_metadata.pocket.transactions.forEach((action) =>
-      actionsArr.push({
-        id: crypto.randomUUID(),
-        name: user.user_metadata.name,
-        phone: user.phone,
-        ...action,
-      }),
-    ),
+  users.data.forEach(
+    (user: {
+      user_metadata: { pocket: { transactions: any[] }; name: any };
+      phone: any;
+    }) =>
+      user.user_metadata.pocket.transactions.forEach((action) =>
+        actionsArr.push({
+          id: crypto.randomUUID(),
+          name: user.user_metadata.name,
+          phone: user.phone,
+          ...action,
+        }),
+      ),
   );
 
-  return actionsArr.sort((a, b) => new Date(b.date) - new Date(a.date));
+  return actionsArr
+    .filter((action) => action.date) // Filter out actions without a date
+    .sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateB - dateA; // Sort in descending order
+    });
 };
 
 const Transactions = () => {

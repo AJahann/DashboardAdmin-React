@@ -29,7 +29,7 @@ const LineChart = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: "top" as const, // Specify the position with as const
       },
     },
   };
@@ -60,7 +60,7 @@ const LineChart = () => {
   };
 
   return (
-    <TitleCard title="Montly Active Users (in K)">
+    <TitleCard title="Monthly Active Users (in K)">
       <Line data={data} options={options} />
     </TitleCard>
   );

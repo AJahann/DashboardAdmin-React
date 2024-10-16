@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { DateValueType } from "react-tailwindcss-datepicker";
 import Datepicker from "react-tailwindcss-datepicker";
 
 import BarChart from "../../components/BarChart";
@@ -6,16 +7,21 @@ import DoughnutChart from "../../components/DoughnutChart";
 import LineChart from "../../components/LineChart";
 
 const Charts = () => {
-  const [dateValue, setDateValue] = useState({
+  const [dateValue, setDateValue] = useState<DateValueType>({
     startDate: new Date(),
     endDate: new Date(),
   });
 
-  const handleDatePickerValueChange = (newValue: {
-    startDate: Date;
-    endDate: Date;
-  }) => {
-    setDateValue(newValue);
+  const handleDatePickerValueChange = (newValue: DateValueType) => {
+    // اگر newValue null باشد، باید آن را به حالت اولیه برگردانیم.
+    if (newValue) {
+      setDateValue(newValue);
+    } else {
+      setDateValue({
+        startDate: new Date(),
+        endDate: new Date(),
+      });
+    }
   };
 
   return (

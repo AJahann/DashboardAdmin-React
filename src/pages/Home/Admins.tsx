@@ -59,7 +59,7 @@ const Admins = () => {
   );
   const isOwnerReq = useQuery({
     queryKey: ["auth"],
-    select(res) {
+    select(res: any) {
       if (res?.data.session.user.user_metadata.is_owner) {
         return true;
       }

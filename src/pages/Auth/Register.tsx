@@ -1,10 +1,8 @@
 import { useFormik } from "formik";
-import { useMutation } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as Yup from "yup";
 
 import InputText from "../../components/InputText";
-import supabase from "../../utils/supapase";
 import LandingIntro from "./LoginIntro";
 
 const initialValues = {
@@ -13,41 +11,41 @@ const initialValues = {
   password: "",
 };
 
-const registerUser = async (values: {
-  name: string;
-  email: string;
-  password: string;
-}) => {
-  const { data, error } = await supabase.auth.signUp({
-    options: {
-      data: {
-        name: values.name,
-        // role: "owner",
-        // is_owner: true,
-      },
-    },
-    email: values.email,
-    password: values.password,
-  });
+// const registerUser = async (values: {
+//   name: string;
+//   email: string;
+//   password: string;
+// }) => {
+//   const { data, error } = await supabase.auth.signUp({
+//     options: {
+//       data: {
+//         name: values.name,
+//         // role: "owner",
+//         // is_owner: true,
+//       },
+//     },
+//     email: values.email,
+//     password: values.password,
+//   });
 
-  if (error) {
-    throw new Error(error.message);
-  }
+//   if (error) {
+//     throw new Error(error.message);
+//   }
 
-  return data;
-};
+//   return data;
+// };
 
 const Register = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const mutation = useMutation(registerUser, {
-    onSuccess: () => {
-      navigate("/app", { replace: true });
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+  // const mutation = useMutation(registerUser, {
+  //   onSuccess: () => {
+  //     navigate("/app", { replace: true });
+  //   },
+  //   onError: (error) => {
+  //     console.error(error);
+  //   },
+  // });
 
   const validationSchema = Yup.object({
     name: Yup.string().required("This field is required"),
@@ -62,7 +60,7 @@ const Register = () => {
   const form = useFormik({
     validationSchema,
     initialValues,
-    onSubmit: (values) => {
+    onSubmit: () => {
       // disable register process
       // mutation.mutate(values);
 
@@ -70,6 +68,14 @@ const Register = () => {
         form.setSubmitting(false);
       }, 5000);
     },
+    // onSubmit: (values) => {
+    //   // disable register process
+    //   // mutation.mutate(values);
+
+    //   setTimeout(() => {
+    //     form.setSubmitting(false);
+    //   }, 5000);
+    // },
   });
 
   return (

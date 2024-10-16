@@ -3,28 +3,27 @@ import {
   Chart as ChartJS,
   Filler,
   Legend,
-  Title,
   Tooltip,
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
 import TitleCard from "./ui/TitleCard";
 
-ChartJS.register(ArcElement, Tooltip, Legend, Tooltip, Filler, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, Filler);
 
 const DoughnutChart = () => {
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: "top" as const, // Ensure TypeScript recognizes this as a valid position
       },
     },
   };
 
   const labels = [
     "Electronics",
-    "Home Applicances",
+    "Home Appliances",
     "Beauty",
     "Furniture",
     "Watches",

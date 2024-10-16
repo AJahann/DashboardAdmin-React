@@ -1,3 +1,4 @@
+import type { ChartOptions } from "chart.js";
 import {
   BarElement,
   CategoryScale,
@@ -5,12 +6,13 @@ import {
   Legend,
   LinearScale,
   Title,
-  Tooltip,
+  Tooltip, // اضافه شده
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
 import TitleCard from "./ui/TitleCard";
 
+// ثبت ماژول‌های ChartJS
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -21,11 +23,12 @@ ChartJS.register(
 );
 
 const BarChart = () => {
-  const options = {
+  // اضافه کردن تایپ صحیح برای options
+  const options: ChartOptions<"bar"> = {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: "top", // یکی از مقادیر مجاز برای position
       },
     },
   };
@@ -45,16 +48,12 @@ const BarChart = () => {
     datasets: [
       {
         label: "Store 1",
-        data: labels.map(() => {
-          return Math.random() * 1000 + 500;
-        }),
+        data: labels.map(() => Math.random() * 1000 + 500),
         backgroundColor: "rgba(255, 99, 132, 1)",
       },
       {
         label: "Store 2",
-        data: labels.map(() => {
-          return Math.random() * 1000 + 500;
-        }),
+        data: labels.map(() => Math.random() * 1000 + 500),
         backgroundColor: "rgba(53, 162, 235, 1)",
       },
     ],

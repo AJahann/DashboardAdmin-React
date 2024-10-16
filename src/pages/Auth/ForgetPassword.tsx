@@ -51,6 +51,12 @@ const ForgetPassword = () => {
                       type="emailId"
                       containerStyle="mt-4"
                       labelTitle="Email Id"
+                      value=""
+                      changeHandle={function a(
+                        _event: React.ChangeEvent<HTMLInputElement>,
+                      ): void {
+                        throw new Error("Function not implemented.");
+                      }}
                     />
                   </div>
 
