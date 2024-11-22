@@ -30,7 +30,7 @@ const Login = () => {
 
   const mutation = useMutation(loginUser, {
     onSuccess: () => {
-      navigate("/app", { replace: true });
+      navigate("/panel", { replace: true });
     },
     onError: (error) => {
       console.error(error);

@@ -35,126 +35,126 @@ const submenuIconClasses = `h-5 w-5`;
 const appRoutes = [
   { path: "", element: <Welcome /> },
   {
-    path: "/app/dashboard",
+    path: "dashboard",
     icon: <Squares2X2Icon className={iconClasses} />,
     element: <Dashboard />,
     name: "Dashboard",
   },
   {
-    path: "/app/admins",
+    path: "admins",
     icon: <UsersIcon className={iconClasses} />,
     name: "Admins",
     element: <Admins />,
   },
-  {
-    path: "/app/users",
-    icon: <UserGroupIcon className={iconClasses} />,
-    name: "users",
-    element: <Users />,
-  },
-  {
-    path: "/app/transactions",
-    icon: <CurrencyDollarIcon className={iconClasses} />,
-    name: "Transactions",
-    element: <Transactions />,
-  },
-  {
-    path: "/app/charts",
-    icon: <ChartBarIcon className={iconClasses} />,
-    name: "Analytics",
-    element: <Charts />,
-  },
-  {
-    path: "/app/integration",
-    icon: <BoltIcon className={iconClasses} />,
-    name: "Integration",
-    element: <div className="text-center ">We Come Back Very Soon!!</div>,
-  },
-  {
-    path: "/app/calendar",
-    icon: <CalendarDaysIcon className={iconClasses} />,
-    name: "Calendar",
-    element: <Calendar />,
-  },
+  // {
+  //   path: "/app/users",
+  //   icon: <UserGroupIcon className={iconClasses} />,
+  //   name: "users",
+  //   element: <Users />,
+  // },
+  // {
+  //   path: "/app/transactions",
+  //   icon: <CurrencyDollarIcon className={iconClasses} />,
+  //   name: "Transactions",
+  //   element: <Transactions />,
+  // },
+  // {
+  //   path: "/app/charts",
+  //   icon: <ChartBarIcon className={iconClasses} />,
+  //   name: "Analytics",
+  //   element: <Charts />,
+  // },
+  // {
+  //   path: "/app/integration",
+  //   icon: <BoltIcon className={iconClasses} />,
+  //   name: "Integration",
+  //   element: <div className="text-center ">We Come Back Very Soon!!</div>,
+  // },
+  // {
+  //   path: "/app/calendar",
+  //   icon: <CalendarDaysIcon className={iconClasses} />,
+  //   name: "Calendar",
+  //   element: <Calendar />,
+  // },
 
-  {
-    path: "",
-    icon: <DocumentDuplicateIcon className={`${iconClasses} inline`} />,
-    name: "Pages",
-    children: [
-      {
-        path: "login",
-        icon: <ArrowRightOnRectangleIcon className={submenuIconClasses} />,
-        name: "Login",
-        element: <Navigate replace to="/login" />,
-      },
-      {
-        path: "register",
-        icon: <UserIcon className={submenuIconClasses} />,
-        name: "Register",
-        element: <Navigate replace to="/register" />,
-      },
-      {
-        path: "forget-password",
-        icon: <KeyIcon className={submenuIconClasses} />,
-        name: "Forgot Password",
-        element: <Navigate replace to="/forget-password" />,
-      },
-      {
-        path: "404",
-        icon: <ExclamationTriangleIcon className={submenuIconClasses} />,
-        name: "404",
-        element: <Page404 />,
-      },
-    ],
-  },
-  {
-    path: "",
-    icon: <Cog6ToothIcon className={`${iconClasses} inline`} />,
-    name: "Settings",
-    children: [
-      {
-        path: "/app/settings-profile",
-        icon: <UserIcon className={submenuIconClasses} />,
-        name: "Profile",
-        element: <Profile />,
-      },
-      {
-        path: "/app/settings-billing",
-        icon: <WalletIcon className={submenuIconClasses} />,
-        name: "Billing",
-        element: <Billing />,
-      },
-      {
-        path: "/app/settings-team",
-        icon: <UsersIcon className={submenuIconClasses} />,
-        name: "Team Members",
-        element: <Team />,
-      },
-    ],
-  },
-  {
-    path: "",
-    icon: <DocumentTextIcon className={`${iconClasses} inline`} />,
-    name: "Documentation",
-    children: [
-      {
-        path: "/app/getting-started",
-        icon: <DocumentTextIcon className={submenuIconClasses} />,
-        name: "Getting Started",
-      },
-      {
-        path: "/app/features",
-        icon: <TableCellsIcon className={submenuIconClasses} />,
-        name: "Features",
-      },
-      {
-        path: "/app/components",
-        icon: <CodeBracketSquareIcon className={submenuIconClasses} />,
-        name: "Components",
-      },
-    ],
-  },
+  // {
+  //   path: "",
+  //   icon: <DocumentDuplicateIcon className={`${iconClasses} inline`} />,
+  //   name: "Pages",
+  //   children: [
+  //     {
+  //       path: "login",
+  //       icon: <ArrowRightOnRectangleIcon className={submenuIconClasses} />,
+  //       name: "Login",
+  //       element: <Navigate replace to="/login" />,
+  //     },
+  //     {
+  //       path: "register",
+  //       icon: <UserIcon className={submenuIconClasses} />,
+  //       name: "Register",
+  //       element: <Navigate replace to="/register" />,
+  //     },
+  //     {
+  //       path: "forget-password",
+  //       icon: <KeyIcon className={submenuIconClasses} />,
+  //       name: "Forgot Password",
+  //       element: <Navigate replace to="/forget-password" />,
+  //     },
+  //     {
+  //       path: "404",
+  //       icon: <ExclamationTriangleIcon className={submenuIconClasses} />,
+  //       name: "404",
+  //       element: <Page404 />,
+  //     },
+  //   ],
+  // },
+  // {
+  //   path: "",
+  //   icon: <Cog6ToothIcon className={`${iconClasses} inline`} />,
+  //   name: "Settings",
+  //   children: [
+  //     {
+  //       path: "/app/settings-profile",
+  //       icon: <UserIcon className={submenuIconClasses} />,
+  //       name: "Profile",
+  //       element: <Profile />,
+  //     },
+  //     {
+  //       path: "/app/settings-billing",
+  //       icon: <WalletIcon className={submenuIconClasses} />,
+  //       name: "Billing",
+  //       element: <Billing />,
+  //     },
+  //     {
+  //       path: "/app/settings-team",
+  //       icon: <UsersIcon className={submenuIconClasses} />,
+  //       name: "Team Members",
+  //       element: <Team />,
+  //     },
+  //   ],
+  // },
+  // {
+  //   path: "",
+  //   icon: <DocumentTextIcon className={`${iconClasses} inline`} />,
+  //   name: "Documentation",
+  //   children: [
+  //     {
+  //       path: "/app/getting-started",
+  //       icon: <DocumentTextIcon className={submenuIconClasses} />,
+  //       name: "Getting Started",
+  //     },
+  //     {
+  //       path: "/app/features",
+  //       icon: <TableCellsIcon className={submenuIconClasses} />,
+  //       name: "Features",
+  //     },
+  //     {
+  //       path: "/app/components",
+  //       icon: <CodeBracketSquareIcon className={submenuIconClasses} />,
+  //       name: "Components",
+  //     },
+  //   ],
+  // },
 ];
 
 export default appRoutes;

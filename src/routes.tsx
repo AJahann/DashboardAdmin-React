@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import Layouts from "./layouts/layouts";
 import ForgetPassword from "./pages/Auth/ForgetPassword";
 import Login from "./pages/Auth/Login";
@@ -22,16 +24,23 @@ const mainRoutes = [
     element: <ForgetPassword />,
   },
   {
-    path: "/app",
+    path: "/panel",
     element: <Layouts />,
     children: appRoutes,
   },
   {
     path: "*",
     element: (
-      <h1 className="text-3xl text-center mt-10">
-        What you are looking for does not exist
-      </h1>
+      <div className="w-full">
+        <h1 className="text-3xl text-center mt-10">
+          What you are looking for does not exist
+        </h1>
+        <div className="flex justify-center mt-9 items-center w-full">
+          <h2 className="text-2xl underline text-blue-600">
+            <Link to="/dashboard">Go to dashboard</Link>
+          </h2>
+        </div>
+      </div>
     ),
   },
 ];

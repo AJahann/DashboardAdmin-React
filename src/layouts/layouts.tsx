@@ -1,7 +1,10 @@
+/* eslint-disable react/jsx-no-useless-fragment */
+import { Toaster } from "react-hot-toast";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 import LeftSideBar from "../components/LeftSideBar";
+import Loading from "../components/Loading";
 import PageContent from "../components/PageContent";
 import RightSidebar from "../components/RightSideBar";
 import supabase from "../utils/supapase";
@@ -13,15 +16,15 @@ const Layouts = () => {
   const { isLoading, error } = useQuery({
     queryKey: ["auth"],
     queryFn: () => supabase.auth.getSession(),
-    select(data) {
-      if (!data.data.session) {
+    select(res) {
+      if (!res.data.session) {
         throw new Error("user in not logged in");
       }
     },
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (error) {
@@ -42,6 +45,7 @@ const Layouts = () => {
       </div>
 
       <RightSidebar />
+      <Toaster position="top-center" reverseOrder={false} />
 
       <ModalLayout />
     </>

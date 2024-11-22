@@ -2,12 +2,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
-import { useQuery } from "react-query";
+import toast from "react-hot-toast";
+import { useMutation, useQuery } from "react-query";
 import { useDispatch } from "react-redux";
 
+import ErrorAlert from "../../components/ErrorAlert";
+import Loading from "../../components/Loading";
 import TitleCard from "../../components/ui/TitleCard";
 import { openModal } from "../../features/modal/Modal";
-import { adminApi } from "../../services/axios/api";
+import UserService from "../../services/UserService";
 import type { AppDispatch } from "../../store/Store";
 
 interface TopSideButtons {
@@ -34,28 +37,19 @@ const TopSideButtons = ({ openModalBtn, reFetch }: TopSideButtons) => {
 
 const reqGetAdmins = async () => {
   try {
-    const response = await adminApi.post("/get-admins", {
-      page: 1,
-      perPage: 20,
-    });
+    const response = await UserService.getAdmins(1, 20);
 
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new Error(response.data.error);
-    }
+    return response;
   } catch (error) {
-    console.error("Error fetching users:", error);
     throw error as Error;
   }
 };
 
 const Admins = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data, isLoading, error, refetch } = useQuery(
+  const { data, isLoading, error, refetch, isRefetching } = useQuery(
     "admins",
     reqGetAdmins,
-    {},
   );
   const isOwnerReq = useQuery({
     queryKey: ["auth"],
@@ -67,25 +61,38 @@ const Admins = () => {
       return false;
     },
   });
+  const reqRemoveAdmin = useMutation(
+    "remove admin action",
+    async (id: string) => {
+      try {
+        const response = await UserService.removeAdmin(id);
 
-  const removeAdmin = async (id: string) => {
-    try {
-      const res = await adminApi.post(`/remove-admin`, { id });
-
-      if (res.status === 200) {
-        await refetch();
+        return response;
+      } catch (err) {
+        return err as Error;
       }
-    } catch (err) {
-      console.error("Error removing admin:", err);
+    },
+  );
+
+  const handleRemoveAdmin = (id: string) => {
+    if (!isOwnerReq.data) {
+      toast.error("You do not have access to remove this admin.");
+      return;
     }
+
+    void toast.promise(reqRemoveAdmin.mutateAsync(id), {
+      loading: "Removing admin...",
+      success: "Admin removed successfully!",
+      error: "Failed to remove admin.",
+    });
   };
 
-  if (isLoading) {
-    return <p>Loading...</p>;
+  if (isLoading || isRefetching) {
+    return <Loading />;
   }
 
   if (error) {
-    return <p>Oops something went wrong!</p>;
+    return <ErrorAlert />;
   }
 
   return (
@@ -106,7 +113,7 @@ const Admins = () => {
       }
     >
       <div className="overflow-x-auto w-full">
-        {data?.data.length ? (
+        {data?.length ? (
           <table className="table w-full">
             <thead>
               <tr>
@@ -119,7 +126,7 @@ const Admins = () => {
               </tr>
             </thead>
             <tbody>
-              {data.data.map((admin: any) => {
+              {data.map((admin: any) => {
                 const { id, email, created_at } = admin;
                 const { name, lastName, assignedTo, status } =
                   admin.user_metadata;
@@ -152,11 +159,7 @@ const Admins = () => {
                     <td>{assignedTo}</td>
                     <td>
                       <button
-                        onClick={async () => {
-                          if (isOwnerReq.data) {
-                            await removeAdmin(id);
-                          }
-                        }}
+                        onClick={() => handleRemoveAdmin(id)}
                         className={`btn btn-square btn-ghost ${
                           isOwnerReq.data ? "" : "cursor-not-allowed"
                         }`}
