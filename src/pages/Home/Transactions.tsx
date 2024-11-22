@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-// /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FunnelIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "react-query";
 
+import ErrorAlert from "../../components/ErrorAlert";
+import Loading from "../../components/Loading";
 import SearchBar from "../../components/ui/SearchBar";
 import TitleCard from "../../components/ui/TitleCard";
-import { adminApi } from "../../services/axios/api";
+import UserRepository from "../../repositories/UserRepository";
 
 const TopSideButtons = () => {
   const locationFilters = ["US", "Paris", "London", "Canada", "Tokyo"];
@@ -43,26 +44,23 @@ const TopSideButtons = () => {
 
 const reqGetUsers = async () => {
   try {
-    const response = await adminApi.post("/get-users", {
-      page: 1,
-      perPage: 20,
+    const response = await UserRepository.listUsers(1, 20);
+
+    const users = response.data.users.filter((user) => {
+      return !user.user_metadata.is_admin && !user.user_metadata.is_owner;
     });
 
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new Error(response.data.error);
-    }
+    return users;
   } catch (error) {
     console.error("Error fetching users:", error);
     throw error as Error;
   }
 };
 
-const sortActions = (users: { data: any }) => {
+const sortActions = (users: any) => {
   const actionsArr: any[] = [];
 
-  users.data.forEach(
+  users.forEach(
     (user: {
       user_metadata: { pocket: { transactions: any[] }; name: any };
       phone: any;
@@ -78,11 +76,11 @@ const sortActions = (users: { data: any }) => {
   );
 
   return actionsArr
-    .filter((action) => action.date) // Filter out actions without a date
+    .filter((action) => action.date)
     .sort((a, b) => {
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
-      return dateB - dateA; // Sort in descending order
+      return dateB - dateA;
     });
 };
 
@@ -90,13 +88,33 @@ const Transactions = () => {
   const { data, isLoading, error } = useQuery("users", reqGetUsers, {});
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (error) {
-    return <p>Oops something went wrong!</p>;
+    return <ErrorAlert />;
   }
-  sortActions(data);
+
+  if (data?.length === 0) {
+    return (
+      <div role="alert" className="alert alert-info">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          className="h-6 w-6 shrink-0 stroke-current"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span>No Transaction here...</span>
+      </div>
+    );
+  }
 
   return (
     <TitleCard
@@ -116,7 +134,7 @@ const Transactions = () => {
             </tr>
           </thead>
           <tbody>
-            {sortActions(data).map((action) => {
+            {sortActions(data ?? []).map((action) => {
               const { id, name, phone, type, amount, date } = action;
 
               const actionDate = new Date(date);

@@ -2,12 +2,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { useFormik } from "formik";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useQuery } from "react-query";
 
+import ErrorAlert from "../../components/ErrorAlert";
 import InputText from "../../components/InputText";
+import Loading from "../../components/Loading";
 import TitleCard from "../../components/ui/TitleCard";
 import ToogleInput from "../../components/ui/ToogleInput";
-import { adminApi } from "../../services/axios/api";
+import UserService from "../../services/UserService";
 import supabase from "../../utils/supapase";
 
 const initValues = {
@@ -49,21 +52,22 @@ const Profile = () => {
     initialValues: formInitValues,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      const req = await adminApi.post("/update-admin", {
-        id: data?.data.user?.id,
-        values,
-      });
+      if (data?.data.user?.id) {
+        const req = await UserService.updateAdmin(data.data.user.id, values);
 
-      console.log(req);
+        if (req.user.id) {
+          toast.success("Every thing up to DATE!");
+        }
+      }
     },
   });
 
   if (isLoading) {
-    return <p>isLoading...</p>;
+    return <Loading />;
   }
 
   if (error) {
-    return <p>Oops something went wrong!</p>;
+    return <ErrorAlert />;
   }
 
   return (

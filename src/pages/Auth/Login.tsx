@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+import toast, { Toaster } from "react-hot-toast";
 import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -19,6 +20,7 @@ const loginUser = async (values: { email: string; password: string }) => {
   });
 
   if (error) {
+    toast.error("Oops something went wrong! report to @A_v101");
     throw new Error(error.message);
   }
 
@@ -30,10 +32,8 @@ const Login = () => {
 
   const mutation = useMutation(loginUser, {
     onSuccess: () => {
+      toast.success("Welcome");
       navigate("/panel", { replace: true });
-    },
-    onError: (error) => {
-      console.error(error);
     },
   });
 
@@ -57,8 +57,6 @@ const Login = () => {
     },
     initialValues,
     onSubmit: (values) => {
-      console.log(values);
-
       mutation.mutate(values);
     },
   });
@@ -127,6 +125,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };

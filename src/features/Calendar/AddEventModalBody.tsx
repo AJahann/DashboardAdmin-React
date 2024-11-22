@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 import InputText from "../../components/InputText";
@@ -21,7 +22,7 @@ const AddEventModalBody = () => {
       const { date } = calendarState;
       const user = await supabase.auth.getUser();
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("Events")
         .insert([
           {
@@ -33,9 +34,10 @@ const AddEventModalBody = () => {
         .select();
 
       if (error) {
-        console.log(error);
+        toast.error("Oops check your conection or move out :))");
       } else {
-        console.log(data);
+        toast.success("Event added successfully");
+        toast("Refresh page", { duration: 4000 });
         dispatch(closeModal());
       }
     },

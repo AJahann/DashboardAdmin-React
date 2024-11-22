@@ -75,7 +75,7 @@ const Users = () => {
   const handleRemoveUser = (id: string) => {
     void toast.promise(reqRemoveUser.mutateAsync(id), {
       loading: "Removing admin...",
-      success: "Admin removed successfully!",
+      success: "User removed successfully!",
       error: "Failed to remove admin.",
     });
   };

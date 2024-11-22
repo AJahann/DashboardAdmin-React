@@ -19,7 +19,7 @@ const LeftSideBar = () => {
         </button>
 
         <li className="mb-2 font-semibold text-xl">
-          <Link to="/app">
+          <Link to="/panel">
             <img
               className="mask mask-squircle w-10"
               src="/logo192.png"

@@ -14,6 +14,8 @@ import { useDispatch } from "react-redux";
 import { setCelendarState } from "../features/Calendar/CalendarState";
 import type { AppDispatch } from "../store/Store";
 import supabase from "../utils/supapase";
+import ErrorAlert from "./ErrorAlert";
+import Loading from "./Loading";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekday);
@@ -76,11 +78,11 @@ const CalendarView = ({ openModalHandle }: { openModalHandle: () => void }) => {
   }, [data]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (error) {
-    return <p>Oops, something went wrong!</p>;
+    return <ErrorAlert />;
   }
 
   return (
