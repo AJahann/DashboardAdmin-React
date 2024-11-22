@@ -1,9 +1,10 @@
 import { useFormik } from "formik";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
 import InputText from "../../components/InputText";
-import { adminApi } from "../../services/axios/api";
+import UserRepository from "../../repositories/UserRepository";
 import type { AppDispatch } from "../../store/Store";
 import { closeModal } from "../modal/Modal";
 
@@ -33,24 +34,33 @@ const AddUserModalBody = () => {
     initialValues,
     onSubmit: async (values) => {
       try {
-        const response = await adminApi.post("/create-user", {
-          phone: values.phone,
-          pasword: values.password,
+        const response = await UserRepository.createUser({
+          phone: `+98${values.phone}`,
+          password: values.password,
           user_metadata: {
             name: values.name,
             lastName: values.lastName,
+            location: "Berlin",
+            pocket: {
+              walletBalance: "0",
+              goldWalletBalance: "0",
+              transactions: [],
+              basket: [],
+              cards: [],
+            },
+            phone_confirm: true,
           },
         });
 
-        const data = await response.data;
+        if (response.data.user) {
+          toast.success("User added successfully ;)", { duration: 2000 });
+          toast("Please refresh table", { duration: 4000 });
 
-        if (response.status === 200) {
-          console.log("Admin created successfully:", data);
-        } else {
-          throw new Error(data.error);
+          form.resetForm();
         }
       } catch (error) {
         console.error("Error creating user:", error);
+        throw error as Error;
       }
 
       dispatch(closeModal());
@@ -125,7 +135,7 @@ const AddUserModalBody = () => {
           type="submit"
           className="btn btn-primary px-6"
         >
-          {form.isSubmitting ? "Loading..." : "Add"}
+          {form.isSubmitting ? "Adding..." : "Add"}
         </button>
       </div>
     </form>

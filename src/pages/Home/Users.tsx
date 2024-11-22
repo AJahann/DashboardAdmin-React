@@ -2,12 +2,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
-import { useQuery } from "react-query";
+import toast from "react-hot-toast";
+import { useMutation, useQuery } from "react-query";
 import { useDispatch } from "react-redux";
 
+import ErrorAlert from "../../components/ErrorAlert";
+import Loading from "../../components/Loading";
 import TitleCard from "../../components/ui/TitleCard";
 import { openModal } from "../../features/modal/Modal";
-import { adminApi } from "../../services/axios/api";
+import UserRepository from "../../repositories/UserRepository";
 import type { AppDispatch } from "../../store/Store";
 import { months } from "../../utils/months";
 
@@ -35,16 +38,13 @@ const TopSideButtons = ({ openModalBtn, reFetch }: TopSideButtons) => {
 
 const reqGetUsers = async () => {
   try {
-    const response = await adminApi.post("/get-users", {
-      page: 1,
-      perPage: 20,
+    const response = await UserRepository.listUsers(1, 20);
+
+    const users = response.data.users.filter((user) => {
+      return !user.user_metadata.is_admin && !user.user_metadata.is_owner;
     });
 
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new Error(response.data.error);
-    }
+    return users;
   } catch (error) {
     console.error("Error fetching users:", error);
     throw error as Error;
@@ -58,25 +58,34 @@ const Users = () => {
     reqGetUsers,
     {},
   );
+  const reqRemoveUser = useMutation(
+    "remove user action",
+    async (id: string) => {
+      try {
+        const response = await UserRepository.deleteUser(id);
+        void refetch();
 
-  const removeUser = async (id: string) => {
-    try {
-      const res = await adminApi.post(`/remove-user`, { id });
-
-      if (res.status === 200) {
-        await refetch();
+        return response;
+      } catch (err) {
+        return err as Error;
       }
-    } catch (err) {
-      console.error("Error removing admin:", err);
-    }
+    },
+  );
+
+  const handleRemoveUser = (id: string) => {
+    void toast.promise(reqRemoveUser.mutateAsync(id), {
+      loading: "Removing admin...",
+      success: "Admin removed successfully!",
+      error: "Failed to remove admin.",
+    });
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (error) {
-    return <p>Oops something went wrong!</p>;
+    return <ErrorAlert />;
   }
 
   return (
@@ -93,7 +102,7 @@ const Users = () => {
       }
     >
       <div className="overflow-x-auto w-full">
-        {data?.data.length ? (
+        {data?.length ? (
           <table className="table w-full">
             <thead>
               <tr>
@@ -106,7 +115,7 @@ const Users = () => {
               </tr>
             </thead>
             <tbody>
-              {data.data.map((user: any) => {
+              {data.map((user: any) => {
                 const { id, phone, created_at } = user;
                 const { name, lastName, location, pocket } = user.user_metadata;
 
@@ -141,9 +150,7 @@ const Users = () => {
                     </td>
                     <td>
                       <button
-                        onClick={async () => {
-                          await removeUser(id);
-                        }}
+                        onClick={() => handleRemoveUser(id)}
                         className="btn btn-square btn-ghost"
                       >
                         <TrashIcon className="w-5" />
@@ -155,7 +162,7 @@ const Users = () => {
             </tbody>
           </table>
         ) : (
-          <h2 className="w-full text-center text-2xl">Oops no admin here...</h2>
+          <h2 className="w-full text-center text-2xl">Oops no User here...</h2>
         )}
       </div>
     </TitleCard>

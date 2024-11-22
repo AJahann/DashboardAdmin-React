@@ -1,9 +1,10 @@
 import { useFormik } from "formik";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
 import InputText from "../../components/InputText";
-import { adminApi } from "../../services/axios/api";
+import UserService from "../../services/UserService";
 import type { AppDispatch } from "../../store/Store";
 import { closeModal } from "../modal/Modal";
 
@@ -33,24 +34,25 @@ const AddAdminModalBody = () => {
     initialValues,
     onSubmit: async (values) => {
       try {
-        const response = await adminApi.post("/add-admin", {
-          email: values.email,
-          password: values.password,
-          user_metadata: {
+        const response = await UserService.addAdmin(
+          values.email,
+          values.password,
+          {
             name: values.name,
             lastName: values.lastName,
           },
-        });
+        );
 
-        const data = await response.data;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (response.user) {
+          toast.success("Admin added successfully ;)", { duration: 2000 });
+          toast("Please refresh table", { duration: 4000 });
 
-        if (response.status === 200) {
-          console.log("Admin created successfully:", data);
-        } else {
-          throw new Error(data.error);
+          form.resetForm();
         }
       } catch (error) {
         console.error("Error creating user:", error);
+        throw error as Error;
       }
 
       dispatch(closeModal());

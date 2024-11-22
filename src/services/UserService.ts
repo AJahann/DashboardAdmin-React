@@ -13,7 +13,13 @@ class UserService {
     const user = {
       email,
       password,
-      user_metadata: { ...metadata, is_admin: true, role: "admin" },
+      user_metadata: {
+        ...metadata,
+        is_admin: true,
+        role: "admin",
+        status: "active",
+        assignedTo: "Tehran",
+      },
       email_confirm: true,
     };
 

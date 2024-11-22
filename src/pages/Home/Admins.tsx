@@ -66,6 +66,7 @@ const Admins = () => {
     async (id: string) => {
       try {
         const response = await UserService.removeAdmin(id);
+        void refetch();
 
         return response;
       } catch (err) {

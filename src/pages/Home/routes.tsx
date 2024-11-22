@@ -46,12 +46,12 @@ const appRoutes = [
     name: "Admins",
     element: <Admins />,
   },
-  // {
-  //   path: "/app/users",
-  //   icon: <UserGroupIcon className={iconClasses} />,
-  //   name: "users",
-  //   element: <Users />,
-  // },
+  {
+    path: "users",
+    icon: <UserGroupIcon className={iconClasses} />,
+    name: "users",
+    element: <Users />,
+  },
   // {
   //   path: "/app/transactions",
   //   icon: <CurrencyDollarIcon className={iconClasses} />,
